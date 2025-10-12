@@ -1,0 +1,28 @@
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NjFjYjhkYS1jZmIwLTQ4NmYtYTM2OS0xOGNiNGRlMGMyZWMiLCJpYXQiOjE3NTk5NDg1NzksImV4cCI6MTc2MDU1MzM3OX0.oCrlKQk5r6pEOugDNbkFkU8Kj2cDkPyvsAgfvrEjIms
+###Sign In ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+### Get All User ###
+GET http://localhost:8000/user
+Authorization: Bearer {{token}}
+
+
+### Change Role ###
+POST http://localhost:8000/user/change-role
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "userId":"b8a329a6-6817-445e-a0ff-952d8edff5c0",
+    "role":"CUSTOMER"
+}
+
+### Delete a User ###
+DELETE http://localhost:8000/user/11cc4794-1b05-41d3-bbc4-2f9aba025415
+Authorization: Bearer {{token}}

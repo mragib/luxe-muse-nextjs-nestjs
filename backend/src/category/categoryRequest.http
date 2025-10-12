@@ -1,0 +1,59 @@
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NjFjYjhkYS1jZmIwLTQ4NmYtYTM2OS0xOGNiNGRlMGMyZWMiLCJpYXQiOjE3NTk2Nzc3MDcsImV4cCI6MTc2MDI4MjUwN30.M-Q07KN6X82HOp2lOgwZ_9d0GHgnbWScLmCfXImIvp4
+@customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiOGEzMjlhNi02ODE3LTQ0NWUtYTBmZi05NTJkOGVkZmY1YzAiLCJpYXQiOjE3NTk2Nzg1MjMsImV4cCI6MTc2MDI4MzMyM30.HTrbpWoFNl0I5Z6e2ZqcqI6QmkBH3qfMGXEcKDrnlNs
+
+### Login as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+
+### Login as Admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+
+### Create a category ###
+POST http://localhost:8000/category
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+"name":"pant",
+"parent":{
+    "id":"cd571f96-c8cc-4939-966e-112a6f498bae"
+}
+}
+
+
+### Get all Category
+GET http://localhost:8000/category
+
+
+### Get a Category
+GET http://localhost:8000/category/5d70b253-9d08-46de-beb8-449eebc0b3bc
+
+
+### Update a category
+PATCH http://localhost:8000/category/cd571f96-c8cc-4939-966e-112a6f498bae
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "parent":{
+        "id":"5d70b253-9d08-46de-beb8-449eebc0b3bc"
+    },
+    "description":"This is from update"
+}
+
+### Delete a category
+DELETE http://localhost:8000/category/86e1f1e4-ecce-4fb7-a4c4-64d78ebfbfb5
+Authorization: Bearer {{admin_token}}

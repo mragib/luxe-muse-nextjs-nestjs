@@ -1,0 +1,28 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbWZtNDc4MnowMDAwMnVtdzR6dTh5NTJlIiwiaWF0IjoxNzU5MjU0NTEzLCJleHAiOjE3NTkyNTUxMTN9.cnMtX3d9O6d3Xwu_9HXPHiNNiPCASFNNO82d-VQRd0w
+post http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "test@gmal.com",
+    "password": "password123"
+}
+
+### Create a session ###
+POST http://localhost:8000/session
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "userId":"cmfm4782z00002umw4zu8y52e",
+    "session": "bcjabsdhg"
+
+}
+
+### Get all session ###
+GET http://localhost:8000/session/
+Authorization: Bearer {{token}}
+
+### Get a session ###
+GET http://localhost:8000/session/cmg6ncyii0003tpu4jm6vasgz
+
+
