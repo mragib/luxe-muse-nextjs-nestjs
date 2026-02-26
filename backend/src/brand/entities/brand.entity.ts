@@ -1,4 +1,7 @@
+import slugify from 'slugify';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   DeleteDateColumn,
   Entity,
@@ -16,12 +19,12 @@ export class Brand {
   @Column({ nullable: true })
   description: string;
 
+  @Column({ unique: true, nullable: true })
+  slug: string;
+
   @Column({ nullable: true })
   image_url: string;
 
   @Column({ default: true })
   is_active: boolean;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 }

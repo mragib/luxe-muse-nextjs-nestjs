@@ -21,7 +21,7 @@ export interface AuthFetchOptions extends RequestInit {
 
 export const authFetch = async (
   url: string | URL,
-  options: AuthFetchOptions = {}
+  options: AuthFetchOptions = {},
 ) => {
   let session = await getSession();
   if (!session?.accessToken) throw new Error("No access token found");
@@ -55,7 +55,7 @@ export const authPostOrPatch = async (
   url: string | URL,
   method: string,
   data: any,
-  options: AuthFetchOptions = {}
+  options: AuthFetchOptions = {},
 ) => {
   let session = await getSession();
   if (!session?.accessToken) throw new Error("No access token found");
@@ -97,7 +97,7 @@ export const authPostOrPatch = async (
 
 export const authDelete = async (
   url: string | URL,
-  options: AuthFetchOptions = {}
+  options: AuthFetchOptions = {},
 ) => {
   let session = await getSession();
   if (!session?.accessToken) throw new Error("No access token found");
@@ -125,7 +125,7 @@ export const authDelete = async (
 export const authFileUpload = async (
   url: string | URL,
   data: FormData,
-  options: AuthFetchOptions = {}
+  options: AuthFetchOptions = {},
 ) => {
   let session = await getSession();
   if (!session?.accessToken) throw new Error("No access token found");
@@ -222,7 +222,7 @@ export const getUsers = async (): Promise<ApiResponse> => {
 
 export const addUserService = async (
   state: ApiResponse,
-  data: FormData
+  data: FormData,
 ): Promise<ApiResponse> => {
   const name = data.get("name");
   const email = data.get("email");
@@ -254,7 +254,7 @@ export const addUserService = async (
   const response = await authPostOrPatch(
     `${BACKEND_URL}/user`,
     "POST",
-    JSON.stringify(validationFields.data)
+    JSON.stringify(validationFields.data),
   );
 
   const resData = await response.json();
@@ -265,7 +265,7 @@ export const addUserService = async (
 export const updateUserService = async (
   state: ApiResponse,
   editId: string,
-  data: FormData
+  data: FormData,
 ): Promise<ApiResponse> => {
   const name = data.get("name");
   const email = data.get("email");
@@ -297,7 +297,7 @@ export const updateUserService = async (
   const response = await authPostOrPatch(
     `${BACKEND_URL}/user/${editId}`,
     "PATCH",
-    JSON.stringify(validationFields.data)
+    JSON.stringify(validationFields.data),
   );
 
   const resData = await response.json();
@@ -315,14 +315,14 @@ export const deleteUserService = async (id: string): Promise<ApiResponse> => {
 export const userRoleChangeService = async (
   state: ApiResponse,
   id: string,
-  data: FormData
+  data: FormData,
 ): Promise<ApiResponse> => {
   const role = data.get("role");
 
   const response = await authPostOrPatch(
     `${BACKEND_URL}/user/change-role`,
     "POST",
-    JSON.stringify({ userId: id, role })
+    JSON.stringify({ userId: id, role }),
   );
   const resData = await response.json();
   if (response.ok) revalidatePath("/admin/users");
@@ -349,45 +349,56 @@ export const getBrands = async (): Promise<ApiResponse> => {
 
 export const addBrandService = async (
   state: ApiResponse,
-  data: FormData
+  data: FormData,
 ): Promise<ApiResponse> => {
-  const name = data.get("name");
-  const description = data.get("description");
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
   const image = data.get("image");
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
-  let image_url = null;
 
-  if (image && image instanceof File) {
-    const imageName = `${Math.trunc(
-      Math.random() * 100000
-    )}-${name}`.replaceAll(/[./\s]/g, "");
+  let image_url: string | undefined = undefined;
+
+  // ✅ Upload image only if actually selected
+  if (image instanceof File && image.size > 0) {
+    const imageName =
+      `${Math.trunc(Math.random() * 100000)}-${name}`.replaceAll(/[./\s]/g, "");
+
     const fileExtension = image.name.split(".").pop();
     const newFileName = `${imageName}.${fileExtension}`;
-    const renamedFile = new File([image], newFileName, { type: image.type });
 
-    const formData2 = new FormData();
-    formData2.append("file", renamedFile);
+    const renamedFile = new File([image], newFileName, {
+      type: image.type,
+    });
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", renamedFile);
 
     const uploadResponse = await authFileUpload(
       `${BACKEND_URL}/brand/upload-brand-image`,
-      formData2
+      uploadFormData,
     );
+
     const uploadData = await uploadResponse.json();
 
-    if (uploadResponse.ok) {
-      image_url = uploadData.path;
-    } else {
-      return uploadData;
-    }
+    if (!uploadResponse.ok) return uploadData;
+
+    image_url = uploadData.path;
   }
 
-  const validationFields = BrandFormSchema.safeParse({
+  // ✅ Build payload dynamically
+  const payload: any = {
     name,
     description,
-    image_url,
     is_active,
-  });
+  };
+
+  if (image_url) {
+    payload.image_url = image_url;
+  }
+
+  // ✅ Validate only what we send
+  const validationFields = BrandFormSchema.safeParse(payload);
 
   if (!validationFields.success) {
     return {
@@ -401,12 +412,14 @@ export const addBrandService = async (
   const response = await authPostOrPatch(
     `${BACKEND_URL}/brand`,
     "POST",
-    JSON.stringify(validationFields.data)
+    JSON.stringify(validationFields.data),
   );
 
   const resData = await response.json();
 
-  if (response.ok) revalidatePath("/admin/brands");
+  if (response.ok) {
+    revalidatePath("/admin/brands");
+  }
 
   return resData;
 };
@@ -414,46 +427,56 @@ export const addBrandService = async (
 export const updateBrandService = async (
   state: ApiResponse,
   editId: string,
-  data: FormData
+  data: FormData,
 ): Promise<ApiResponse> => {
-  const name = data.get("name");
-  const description = data.get("description");
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
   const image = data.get("image");
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
 
-  let image_url = null;
+  let image_url: string | undefined = undefined;
 
-  if (image && image instanceof File) {
-    const imageName = `${Math.trunc(
-      Math.random() * 100000
-    )}-${name}`.replaceAll(/[./\s]/g, "");
+  // ✅ Upload new image only if selected
+  if (image instanceof File && image.size > 0) {
+    const imageName =
+      `${Math.trunc(Math.random() * 100000)}-${name}`.replaceAll(/[./\s]/g, "");
+
     const fileExtension = image.name.split(".").pop();
     const newFileName = `${imageName}.${fileExtension}`;
-    const renamedFile = new File([image], newFileName, { type: image.type });
 
-    const formData2 = new FormData();
-    formData2.append("file", renamedFile);
+    const renamedFile = new File([image], newFileName, {
+      type: image.type,
+    });
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", renamedFile);
 
     const uploadResponse = await authFileUpload(
       `${BACKEND_URL}/brand/upload-brand-image`,
-      formData2
+      uploadFormData,
     );
+
     const uploadData = await uploadResponse.json();
 
-    if (uploadResponse.ok) {
-      image_url = uploadData.path;
-    } else {
-      return uploadData;
-    }
+    if (!uploadResponse.ok) return uploadData;
+
+    image_url = uploadData.path;
   }
 
-  const validationFields = BrandFormSchema.safeParse({
+  // ✅ Build payload dynamically (avoid overwriting image)
+  const payload: any = {
     name,
     description,
-    image_url,
     is_active,
-  });
+  };
+
+  if (image_url) {
+    payload.image_url = image_url;
+  }
+
+  // ✅ Validate only what we send
+  const validationFields = BrandFormSchema.safeParse(payload);
 
   if (!validationFields.success) {
     return {
@@ -467,14 +490,17 @@ export const updateBrandService = async (
   const response = await authPostOrPatch(
     `${BACKEND_URL}/brand/${editId}`,
     "PATCH",
-    JSON.stringify(validationFields.data)
+    JSON.stringify(validationFields.data),
   );
 
   const resData = await response.json();
-  if (response.ok) revalidatePath("/admin/brands");
+
+  if (response.ok) {
+    revalidatePath("/admin/brands");
+  }
+
   return resData;
 };
-
 export const deleteBrandService = async (id: string): Promise<ApiResponse> => {
   const response = await authDelete(`${BACKEND_URL}/brand/${id}`);
   const resData = await response.json();
@@ -504,58 +530,64 @@ export const getCategory = async (): Promise<ApiResponse> => {
 
 export const addCategoryService = async (
   state: ApiResponse,
-  data: FormData
+  data: FormData,
 ): Promise<ApiResponse> => {
-  const name = data.get("name");
-  const description = data.get("description");
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
   const image = data.get("image");
   let parentId = data.get("parentId");
-
-  // ✅ Handle parentId correctly (UUID or null)
-  if (!parentId || parentId === "undefined" || parentId === "") {
-    parentId = null;
-  } else {
-    parentId = parentId.toString(); // keep UUID as string
-  }
-
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
 
-  let image_url: string | null = null;
+  // ✅ Normalize parentId
+  if (!parentId || parentId === "undefined" || parentId === "") {
+    parentId = null;
+  } else {
+    parentId = parentId.toString();
+  }
 
-  // ✅ Handle optional image upload
-  if (image && image instanceof File) {
-    const imageName = `${Math.trunc(
-      Math.random() * 100000
-    )}-${name}`.replaceAll(/[./\s]/g, "");
+  let image_url: string | undefined = undefined;
+
+  // ✅ Upload image only if selected
+  if (image instanceof File && image.size > 0) {
+    const imageName =
+      `${Math.trunc(Math.random() * 100000)}-${name}`.replaceAll(/[./\s]/g, "");
+
     const fileExtension = image.name.split(".").pop();
     const newFileName = `${imageName}.${fileExtension}`;
-    const renamedFile = new File([image], newFileName, { type: image.type });
 
-    const formData2 = new FormData();
-    formData2.append("file", renamedFile);
+    const renamedFile = new File([image], newFileName, {
+      type: image.type,
+    });
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", renamedFile);
 
     const uploadResponse = await authFileUpload(
       `${BACKEND_URL}/category/upload-image`,
-      formData2
+      uploadFormData,
     );
+
     const uploadData = await uploadResponse.json();
 
-    if (!uploadResponse.ok) {
-      return uploadData;
-    }
+    if (!uploadResponse.ok) return uploadData;
 
     image_url = uploadData.path;
   }
 
-  // ✅ Validate fields regardless of image upload
-  const validationFields = CategoryFormSchema.safeParse({
+  // ✅ Build payload dynamically
+  const payload: any = {
     name,
     description,
-    image_url,
     is_active,
     parentId,
-  });
+  };
+
+  if (image_url) {
+    payload.image_url = image_url;
+  }
+
+  const validationFields = CategoryFormSchema.safeParse(payload);
 
   if (!validationFields.success) {
     return {
@@ -566,16 +598,113 @@ export const addCategoryService = async (
     };
   }
 
-  // ✅ Send clean DTO to backend
   const response = await authPostOrPatch(
     `${BACKEND_URL}/category`,
     "POST",
-    JSON.stringify(validationFields.data)
+    JSON.stringify(validationFields.data),
   );
 
   const resData = await response.json();
 
-  if (response.ok) revalidatePath("/admin/category");
+  if (response.ok) {
+    revalidatePath("/admin/category");
+  }
 
+  return resData;
+};
+
+export const updateCategoryService = async (
+  state: ApiResponse,
+  editId: string,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const image = data.get("image");
+  let parentId = data.get("parentId");
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+
+  // ✅ Normalize parentId
+  if (!parentId || parentId === "undefined" || parentId === "") {
+    parentId = null;
+  } else {
+    parentId = parentId.toString();
+  }
+
+  let image_url: string | undefined = undefined;
+
+  // ✅ Upload new image only if selected
+  if (image instanceof File && image.size > 0) {
+    const imageName =
+      `${Math.trunc(Math.random() * 100000)}-${name}`.replaceAll(/[./\s]/g, "");
+
+    const fileExtension = image.name.split(".").pop();
+    const newFileName = `${imageName}.${fileExtension}`;
+
+    const renamedFile = new File([image], newFileName, {
+      type: image.type,
+    });
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", renamedFile);
+
+    const uploadResponse = await authFileUpload(
+      `${BACKEND_URL}/category/upload-image`,
+      uploadFormData,
+    );
+
+    const uploadData = await uploadResponse.json();
+
+    if (!uploadResponse.ok) return uploadData;
+
+    image_url = uploadData.path;
+  }
+
+  // ✅ Build payload dynamically (do not overwrite image if not changed)
+  const payload: any = {
+    name,
+    description,
+    is_active,
+    parentId,
+  };
+
+  if (image_url) {
+    payload.image_url = image_url;
+  }
+
+  // ✅ Validate only what we send
+  const validationFields = CategoryFormSchema.safeParse(payload);
+
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/category/${editId}`,
+    "PATCH",
+    JSON.stringify(validationFields.data),
+  );
+
+  const resData = await response.json();
+
+  if (response.ok) {
+    revalidatePath("/admin/category");
+  }
+
+  return resData;
+};
+
+export const deleteCategoryService = async (
+  id: string,
+): Promise<ApiResponse> => {
+  const response = await authDelete(`${BACKEND_URL}/category/${id}`);
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/category");
   return resData;
 };

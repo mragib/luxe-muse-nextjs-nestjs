@@ -1,4 +1,4 @@
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NjFjYjhkYS1jZmIwLTQ4NmYtYTM2OS0xOGNiNGRlMGMyZWMiLCJpYXQiOjE3NTk2Nzc3MDcsImV4cCI6MTc2MDI4MjUwN30.M-Q07KN6X82HOp2lOgwZ_9d0GHgnbWScLmCfXImIvp4
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZDljZGRjZC0yN2ZkLTRmZTUtOTlmNS0wYTkzZmU3YjczNGEiLCJpYXQiOjE3NzIxMTYxNDksImV4cCI6MTc3MjcyMDk0OX0.g3y5up248bSPvbO8xXI-nLiJu5aINseFXRNPYjrO2Y4
 @customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiOGEzMjlhNi02ODE3LTQ0NWUtYTBmZi05NTJkOGVkZmY1YzAiLCJpYXQiOjE3NTk2Nzg1MjMsImV4cCI6MTc2MDI4MzMyM30.HTrbpWoFNl0I5Z6e2ZqcqI6QmkBH3qfMGXEcKDrnlNs
 
 ### Login as customer ###
@@ -27,10 +27,7 @@ Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
 {
-"name":"pant",
-"parent":{
-    "id":"cd571f96-c8cc-4939-966e-112a6f498bae"
-}
+"name":"laptop"
 }
 
 

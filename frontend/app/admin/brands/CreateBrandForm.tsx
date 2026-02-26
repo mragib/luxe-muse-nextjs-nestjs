@@ -31,37 +31,61 @@ export const CreateBrandForm = ({
     defaultValues: isEditSession ? { ...editData } : {},
   });
 
+  // const onSubmit = async (data: Record<string, any>) => {
+  //   const formData = new FormData();
+  //   if (editId) {
+  //     Object.entries(data).forEach(([key, value]) => {
+  //       console.log("Processing field:", key, value);
+  //       if (key === "image_url" && value && value.length > 0) {
+  //         // For file inputs, append the actual File object
+  //         formData.append("image", value[0]);
+  //       } else {
+  //         // For other fields, convert to string
+  //         formData.append(key, String(value));
+  //       }
+  //     });
+
+  //     const result = await updateBrandService(undefined, editId, formData);
+  //     setState(result);
+  //   } else {
+  //     Object.entries(data).forEach(([key, value]) => {
+  //       if (key === "image_url" && value && value.length > 0) {
+  //         // For file inputs, append the actual File object
+  //         formData.append("image", value[0]);
+  //       } else {
+  //         // For other fields, convert to string
+  //         formData.append(key, String(value));
+  //       }
+  //     });
+
+  //     const result = await addBrandService(undefined, formData);
+  //     setState(result);
+  //   }
+  // };
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
-    if (editId) {
-      Object.entries(data).forEach(([key, value]) => {
-        if (key === "image_url" && value && value.length > 0) {
-          // For file inputs, append the actual File object
-          formData.append("image", value[0]);
-        } else {
-          // For other fields, convert to string
-          formData.append(key, String(value));
-        }
-      });
 
-      const result = await updateBrandService(undefined, editId, formData);
-      setState(result);
-    } else {
-      Object.entries(data).forEach(([key, value]) => {
-        if (key === "image_url" && value && value.length > 0) {
-          // For file inputs, append the actual File object
-          formData.append("image", value[0]);
-        } else {
-          // For other fields, convert to string
-          formData.append(key, String(value));
-        }
-      });
+    for (const key in data) {
+      const value = data[key];
 
-      const result = await addBrandService(undefined, formData);
-      setState(result);
+      // Handle file input safely
+      if (key === "image_url") {
+        if (value instanceof FileList && value.length > 0) {
+          formData.append("image", value[0]);
+        }
+        continue; // skip normal append for image_url
+      }
+
+      // Handle other fields
+      formData.append(key, String(value));
     }
-  };
 
+    const result = editId
+      ? await updateBrandService(undefined, editId, formData)
+      : await addBrandService(undefined, formData);
+
+    setState(result);
+  };
   useEffect(() => {
     if (state?.status === APIStatus.SUCCESS) {
       toast.success(state.message || "Brand saved successfully");

@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { IsNull, Repository } from 'typeorm';
 import { ApiResponse } from 'src/types/types';
+import slugify from 'slugify';
 
 @Injectable()
 export class CategoryService {
@@ -21,7 +22,11 @@ export class CategoryService {
     createCategoryDto: CreateCategoryDto,
   ): Promise<ApiResponse<Category>> {
     try {
-      console.log(createCategoryDto);
+      createCategoryDto.slug = slugify(createCategoryDto.name, {
+        lower: true,
+        strict: true,
+        trim: true,
+      });
       const category = await this.categoryRepository.save(createCategoryDto);
       return {
         status: 'success',
@@ -51,7 +56,13 @@ export class CategoryService {
 
   findOne(id: string) {
     return this.categoryRepository.findOne({
-      where: { id, deletedAt: IsNull() },
+      where: { id },
+    });
+  }
+
+  findOneBySlug(slug: string) {
+    return this.categoryRepository.findOne({
+      where: { slug },
     });
   }
 
@@ -61,6 +72,11 @@ export class CategoryService {
   ): Promise<ApiResponse<Category>> {
     const found = await this.findOne(id);
     if (!found) throw new NotFoundException('Category is not found');
+    updateCategoryDto.slug = slugify(updateCategoryDto.name || found.name, {
+      lower: true,
+      strict: true,
+      trim: true,
+    });
     const updatedCategory = await this.categoryRepository.save({
       id,
       ...updateCategoryDto,

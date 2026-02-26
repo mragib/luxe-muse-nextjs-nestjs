@@ -72,9 +72,9 @@ export class BrandController {
   }
 
   @Public()
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const found = await this.brandService.findOne(id);
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string) {
+    const found = await this.brandService.findBySlug(slug);
     if (!found) throw new NotFoundException('Brand is not found');
     return found;
   }

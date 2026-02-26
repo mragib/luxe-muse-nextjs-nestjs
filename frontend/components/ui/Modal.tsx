@@ -103,7 +103,7 @@ function Window({ children, name }: WindowProps) {
         ref={ref}
       >
         <button
-          className="bg-none border-none p-1 rounded-sm absolute top-3 right-4 hover:bg-[#f3f4f6] dark:text-[#9ca3af] dark:hover:bg-[#374151]"
+          className="bg-none border-none p-1 rounded-sm absolute top-3 right-4 hover:bg-[#f3f4f6] dark:text-[#9ca3af] dark:hover:bg-[#374151] hover:cursor-pointer"
           onClick={close}
           aria-label="Close modal"
         >
@@ -112,7 +112,7 @@ function Window({ children, name }: WindowProps) {
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
 

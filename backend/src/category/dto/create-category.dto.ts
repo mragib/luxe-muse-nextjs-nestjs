@@ -28,4 +28,10 @@ export class CreateCategoryDto {
   @IsString()
   @IsOptional()
   parentId: string;
+
+  @IsOptional()
+  is_active?: boolean;
+
+  @IsOptional()
+  slug?: string;
 }

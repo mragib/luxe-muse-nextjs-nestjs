@@ -36,7 +36,7 @@ export class CategoryController {
     FileInterceptor('file', {
       storage: diskStorage({
         destination: (req, file, cb) => {
-          const uploadPath = './uploads/brand-images';
+          const uploadPath = './uploads/category-images';
 
           if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
@@ -53,7 +53,7 @@ export class CategoryController {
     }),
   )
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const filePath = `/uploads/brand-images/${file.filename}`;
+    const filePath = `/uploads/category-images/${file.filename}`;
 
     try {
       return {
@@ -72,9 +72,9 @@ export class CategoryController {
   }
 
   @Public()
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const found = await this.categoryService.findOne(id);
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string) {
+    const found = await this.categoryService.findOneBySlug(slug);
     if (!found) throw new NotFoundException('Category is not found');
     return found;
   }

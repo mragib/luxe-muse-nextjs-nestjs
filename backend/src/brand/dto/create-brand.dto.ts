@@ -14,4 +14,7 @@ export class CreateBrandDto {
   @IsString()
   @IsOptional()
   image_url?: string;
+
+  @IsOptional()
+  slug?: string;
 }

@@ -17,6 +17,9 @@ export class Category {
   @Column({ unique: true })
   name: string;
 
+  @Column({ nullable: true, unique: true })
+  slug: string;
+
   @Column({ nullable: true })
   description: string;
 
@@ -34,7 +37,4 @@ export class Category {
 
   @Column({ default: true })
   is_active: boolean;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 }

@@ -7,6 +7,7 @@ import { Brand } from "@/lib/type";
 import { capitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import Image from "next/image";
 
 export const columns: ColumnDef<Brand>[] = [
   {
@@ -50,7 +51,7 @@ export const columns: ColumnDef<Brand>[] = [
   {
     id: "image",
     accessorKey: "image_url",
-    cell: ({ row }) => capitalize(row.original.image_url || ""),
+    cell: ({ row }) => <BrandImage image_url={row.original.image_url || ""} />,
     header: ({ column }) => {
       return (
         <Button
@@ -90,3 +91,15 @@ export const columns: ColumnDef<Brand>[] = [
     },
   },
 ];
+
+const BrandImage = ({ image_url }: { image_url: string }) => {
+  return (
+    <div className=" rounded-md overflow-hidden flex items-center justify-center ">
+      {image_url ? (
+        <Image src={image_url} alt={image_url} width={40} height={40} />
+      ) : (
+        <span className="text-xs text-muted-foreground">No Image</span>
+      )}
+    </div>
+  );
+};

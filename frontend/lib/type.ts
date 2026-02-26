@@ -118,5 +118,5 @@ export const CategoryFormSchema = z.object({
   description: z.string().optional(),
   image_url: z.string().optional(),
   is_active: z.boolean(),
-  parentId: z.string().optional(),
+  parentId: z.string().nullable().optional(),
 });

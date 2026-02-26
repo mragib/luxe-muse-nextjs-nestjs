@@ -1,15 +1,25 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { CreatableSelect } from "@/components/ui/creatableSelect";
 import Form from "@/components/ui/Form";
 import FormRow from "@/components/ui/FormRow";
 import { Input } from "@/components/ui/input";
-import { addCategoryService } from "@/lib/data-service";
+import { addCategoryService, updateCategoryService } from "@/lib/data-service";
 import { ApiResponse, APIStatus, Category } from "@/lib/type";
+import { changeForSelectObject } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
+
+interface CategoryFormData {
+  name: string;
+  description: string;
+  image_url: FileList | string;
+  parent: { label: string; value: string } | null;
+  is_active: boolean;
+}
 
 interface CreateCategoryFormProps {
   onCloseModal?: () => void;
@@ -23,57 +33,57 @@ export default function CreateCategoryForm({
   categories,
 }: CreateCategoryFormProps) {
   const [state, setState] = useState<ApiResponse>();
-  const { id: editId, ...editData } = categoryToEdit;
+  const { id: editId, parent: editiableParent, ...editData } = categoryToEdit;
   const isEditSession = Boolean(editId);
 
-  const options =
-    categories?.map((cat) => ({ value: cat.id, label: cat.name })) || [];
+  if (isEditSession) console.log("Editing category ID:", categoryToEdit);
+
+  const filteredCategories = categories?.filter((cat) => cat.id !== editId);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm({
-    defaultValues: isEditSession ? { ...editData } : {},
+  } = useForm<CategoryFormData>({
+    defaultValues: isEditSession
+      ? {
+          ...editData,
+          parent: editiableParent
+            ? changeForSelectObject(editiableParent)
+            : null,
+        }
+      : {},
   });
 
   const onSubmit = async (data: Record<string, any>) => {
-    const processedData = {
-      ...data,
-      parentId: data.parentId?.value || "",
-    };
-
-    console.log(processedData);
-
     const formData = new FormData();
-    if (editId) {
-      Object.entries(processedData).forEach(([key, value]) => {
-        if (key === "image_url" && value && value.length > 0) {
-          // For file inputs, append the actual File object
-          formData.append("image", value[0]);
-        } else {
-          // For other fields, convert to string
-          formData.append(key, String(value));
-        }
-      });
 
-      const result = await updateCategoryService(undefined, editId, formData);
-      setState(result);
-    } else {
-      Object.entries(processedData).forEach(([key, value]) => {
-        if (key === "image_url" && value && value.length > 0) {
-          // For file inputs, append the actual File object
-          formData.append("image", value[0]);
-        } else {
-          // For other fields, convert to string
-          formData.append(key, String(value));
-        }
-      });
+    for (const key in data) {
+      const value = data[key];
 
-      const result = await addCategoryService(undefined, formData);
-      setState(result);
+      // ✅ File upload
+      if (key === "image_url") {
+        if (value instanceof FileList && value.length > 0) {
+          formData.append("image", value[0]);
+        }
+        continue;
+      }
+
+      // ✅ Parent mapping (VERY IMPORTANT FIX)
+      if (key === "parent") {
+        formData.append("parentId", value?.value || "");
+        continue;
+      }
+
+      formData.append(key, String(value));
     }
+
+    const result = editId
+      ? await updateCategoryService(undefined, editId, formData)
+      : await addCategoryService(undefined, formData);
+
+    setState(result);
   };
 
   useEffect(() => {
@@ -102,22 +112,26 @@ export default function CreateCategoryForm({
         />
       </FormRow>
 
+      {isEditSession && categoryToEdit?.image_url && (
+        <div className="mb-3">
+          <p className="text-sm text-gray-500 mb-1">Current Image</p>
+          <img
+            src={categoryToEdit.image_url}
+            alt="Category"
+            className="h-20 w-20 object-cover rounded"
+          />
+        </div>
+      )}
+
       <FormRow label="Parent" error={state?.error?.parentId}>
         <Controller
-          name="parentId"
+          name="parent"
           control={control}
           render={({ field }) => (
-            <Select
-              options={options}
-              isClearable
+            <CreatableSelect
+              {...field}
+              data={filteredCategories}
               placeholder="Select parent category..."
-              // react-hook-form integration
-              value={
-                options.find((option) => option.value === field.value) || null
-              }
-              onChange={(selectedOption) =>
-                field.onChange(selectedOption ? selectedOption.value : null)
-              }
             />
           )}
         />

@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Brand } from './entities/brand.entity';
 import { IsNull, Repository } from 'typeorm';
 import { ApiResponse } from 'src/types/types';
+import slugify from 'slugify';
 
 @Injectable()
 export class BrandService {
@@ -19,6 +20,11 @@ export class BrandService {
   ) {}
   async create(createBrandDto: CreateBrandDto): Promise<ApiResponse<Brand>> {
     try {
+      createBrandDto.slug = slugify(createBrandDto.name, {
+        lower: true,
+        trim: true,
+        strict: true,
+      });
       const brand = await this.brandRepository.save(createBrandDto);
       return {
         status: 'success',
@@ -45,7 +51,11 @@ export class BrandService {
   }
 
   findOne(id: string) {
-    return this.brandRepository.findOne({ where: { id, deletedAt: IsNull() } });
+    return this.brandRepository.findOne({ where: { id } });
+  }
+
+  findBySlug(slug: string) {
+    return this.brandRepository.findOne({ where: { slug } });
   }
 
   async update(
@@ -54,6 +64,11 @@ export class BrandService {
   ): Promise<ApiResponse<Brand>> {
     const brand = await this.findOne(id);
     if (!brand) throw new NotFoundException('Brand is not found');
+    updateBrandDto.slug = slugify(updateBrandDto.name || brand.name, {
+      lower: true,
+      trim: true,
+      strict: true,
+    });
     const updatedBrand = await this.brandRepository.save({
       id,
       ...updateBrandDto,
@@ -67,6 +82,6 @@ export class BrandService {
   }
 
   async remove(id: string) {
-    return this.brandRepository.softDelete(id);
+    return this.brandRepository.delete(id);
   }
 }

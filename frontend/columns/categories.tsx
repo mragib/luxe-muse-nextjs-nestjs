@@ -1,14 +1,16 @@
 "use client";
 
-import BrandRow from "@/app/admin/brands/BrandRow";
-import { UserRow } from "@/app/admin/users/UserRow";
+import CategoryRow from "@/app/admin/category/CategoryRow";
 import { Button } from "@/components/ui/button";
 import { Category } from "@/lib/type";
 import { capitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
+import Image from "next/image";
 
-export const columns: ColumnDef<Category>[] = [
+export const getCategoryColumns = (
+  categories: Category[],
+): ColumnDef<Category>[] => [
   {
     header: "#",
     accessorKey: "index",
@@ -50,7 +52,9 @@ export const columns: ColumnDef<Category>[] = [
   {
     id: "image",
     accessorKey: "image_url",
-    cell: ({ row }) => capitalize(row.original.image_url || ""),
+    cell: ({ row }) => (
+      <CategoryImage image_url={row.original.image_url || ""} />
+    ),
     header: ({ column }) => {
       return (
         <Button
@@ -99,11 +103,23 @@ export const columns: ColumnDef<Category>[] = [
     },
   },
 
-  //   {
-  //     id: "actions",
-  //     cell: ({ row }) => {
-  //       const data = row.original;
-  //       return <BrandRow brand={data} />;
-  //     },
-  //   },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const data = row.original;
+      return <CategoryRow category={data} categories={categories} />;
+    },
+  },
 ];
+
+const CategoryImage = ({ image_url }: { image_url: string }) => {
+  return (
+    <div className=" rounded-md overflow-hidden flex items-center justify-center ">
+      {image_url ? (
+        <Image src={image_url} alt={image_url} width={40} height={40} />
+      ) : (
+        <span className="text-xs text-muted-foreground">No Image</span>
+      )}
+    </div>
+  );
+};
