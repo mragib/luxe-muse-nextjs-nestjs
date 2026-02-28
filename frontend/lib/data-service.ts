@@ -8,10 +8,14 @@ import {
   AdminUser,
   ApiResponse,
   APIStatus,
+  AttributeFormSchema,
+  AttributeValueFormSchema,
   Brand,
   BrandFormSchema,
   Category,
   CategoryFormSchema,
+  Product,
+  ProductFormSchema,
   UserFormSchema,
 } from "./type";
 
@@ -161,6 +165,11 @@ export const authFileUpload = async (
     }
   }
 
+  return response;
+};
+
+export const publicFetch = async (url: string) => {
+  const response = await fetch(url);
   return response;
 };
 
@@ -331,7 +340,7 @@ export const userRoleChangeService = async (
 
 // brand services
 export const getBrands = async (): Promise<ApiResponse> => {
-  const response = await authFetch(`${BACKEND_URL}/brand`);
+  const response = await publicFetch(`${BACKEND_URL}/brand`);
   const data = await response.json();
 
   const processData = data.data.map((brand: Brand) => {
@@ -510,7 +519,7 @@ export const deleteBrandService = async (id: string): Promise<ApiResponse> => {
 
 // category services
 export const getCategory = async (): Promise<ApiResponse> => {
-  const response = await authFetch(`${BACKEND_URL}/category`);
+  const response = await publicFetch(`${BACKEND_URL}/category`);
   const data = await response.json();
 
   const processData = data.data.map((category: Category) => {
@@ -706,5 +715,349 @@ export const deleteCategoryService = async (
   const response = await authDelete(`${BACKEND_URL}/category/${id}`);
   const resData = await response.json();
   if (response.ok) revalidatePath("/admin/category");
+  return resData;
+};
+
+// Attribute Services
+export const getAttributes = async (): Promise<ApiResponse> => {
+  const response = await publicFetch(`${BACKEND_URL}/attribute`);
+  const data = await response.json();
+  return data;
+};
+
+export const addAttributeService = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+
+  const payload: any = {
+    name,
+    description,
+    is_active,
+  };
+
+  const validationFields = AttributeFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/attribute`,
+    "POST",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/attribute");
+  return resData;
+};
+
+export const updateAttributeService = async (
+  state: ApiResponse,
+  editId: string,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+  const payload: any = {
+    name,
+    description,
+    is_active,
+  };
+  const validationFields = AttributeFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/attribute/${editId}`,
+    "PATCH",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/attribute");
+  return resData;
+};
+
+export const deleteAttributeService = async (
+  id: string,
+): Promise<ApiResponse> => {
+  const response = await authDelete(`${BACKEND_URL}/attribute/${id}`);
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/attribute");
+  return resData;
+};
+
+// Attribute Value Services
+export const getAttributeValues = async (): Promise<ApiResponse> => {
+  const response = await publicFetch(`${BACKEND_URL}/attribute-value`);
+  const data = await response.json();
+  return data;
+};
+
+export const addAttributeValueService = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const attributeId = data.get("attributeId") as string;
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+  const payload: any = {
+    name,
+    description,
+    attributeId,
+    is_active,
+  };
+  const validationFields = AttributeValueFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/attribute-value`,
+    "POST",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/attribute-value");
+  return resData;
+};
+
+export const updateAttributeValueService = async (
+  state: ApiResponse,
+  editId: string,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const attributeId = data.get("attributeId") as string;
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+  const payload: any = {
+    name,
+    description,
+    attributeId,
+    is_active,
+  };
+
+  const validationFields = AttributeValueFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/attribute-value/${editId}`,
+    "PATCH",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/attribute-value");
+  return resData;
+};
+
+export const deleteAttributeValueService = async (
+  id: string,
+): Promise<ApiResponse> => {
+  const response = await authDelete(`${BACKEND_URL}/attribute-value/${id}`);
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/attribute-value");
+  return resData;
+};
+
+// Product Services
+export const getProducts = async (): Promise<ApiResponse> => {
+  const response = await publicFetch(`${BACKEND_URL}/product`);
+  const data = await response.json();
+  const processData = data.data.map((product: Product) => {
+    return {
+      ...product,
+      image_url: product.image_url
+        ? `${BACKEND_URL}${product.image_url}`
+        : null,
+    };
+  });
+  return { ...data, data: processData };
+};
+
+export const addProductService = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const image = data.get("image");
+  const unit = data.get("unit") as string | null;
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+
+  const sellingUnitPriceStr = data.get("sellingUnitPrice") as string;
+  const costUnitPriceStr = data.get("costUnitPrice") as string;
+  const wholesaleUnitPriceStr = data.get("wholesaleUnitPrice") as string;
+
+  let image_url: string | undefined = undefined;
+
+  // ✅ Upload image only if selected
+  if (image instanceof File && image.size > 0) {
+    const imageName =
+      `${Math.trunc(Math.random() * 100000)}-${name}`.replaceAll(/[./\s]/g, "");
+
+    const fileExtension = image.name.split(".").pop();
+    const newFileName = `${imageName}.${fileExtension}`;
+
+    const renamedFile = new File([image], newFileName, {
+      type: image.type,
+    });
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", renamedFile);
+
+    const uploadResponse = await authFileUpload(
+      `${BACKEND_URL}/product/upload-image`,
+      uploadFormData,
+    );
+
+    const uploadData = await uploadResponse.json();
+
+    if (!uploadResponse.ok) return uploadData;
+
+    image_url = uploadData.path;
+  }
+
+  const payload: any = {
+    name,
+    description,
+    image_url,
+    unit,
+    is_active,
+    sellingUnitPrice: parseFloat(sellingUnitPriceStr) || 0,
+    costUnitPrice: parseFloat(costUnitPriceStr) || 0,
+    wholesaleUnitPrice: parseFloat(wholesaleUnitPriceStr) || 0,
+  };
+
+  const validationFields = ProductFormSchema.safeParse(payload);
+
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/product`,
+    "POST",
+    JSON.stringify(validationFields.data),
+  );
+
+  const resData = await response.json();
+
+  if (response.ok) revalidatePath("/admin/product");
+  return resData;
+};
+
+export const updateProductService = async (
+  state: ApiResponse,
+  editId: string,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const description = data.get("description") as string;
+  const image = data.get("image");
+  const unit = data.get("unit") as string | null;
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+  const sellingUnitPriceStr = data.get("sellingUnitPrice") as string;
+  const costUnitPriceStr = data.get("costUnitPrice") as string;
+  const wholesaleUnitPriceStr = data.get("wholesaleUnitPrice") as string;
+
+  let image_url: string | undefined = undefined;
+
+  if (image instanceof File && image.size > 0) {
+    const imageName =
+      `${Math.trunc(Math.random() * 100000)}-${name}`.replaceAll(/[./\s]/g, "");
+
+    const fileExtension = image.name.split(".").pop();
+    const newFileName = `${imageName}.${fileExtension}`;
+
+    const renamedFile = new File([image], newFileName, {
+      type: image.type,
+    });
+
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", renamedFile);
+
+    const uploadResponse = await authFileUpload(
+      `${BACKEND_URL}/product/upload-image`,
+      uploadFormData,
+    );
+
+    const uploadData = await uploadResponse.json();
+
+    if (!uploadResponse.ok) return uploadData;
+
+    image_url = uploadData.path;
+  }
+
+  const payload: any = {
+    name,
+    description,
+    unit,
+    is_active,
+    image_url,
+    sellingUnitPrice: parseFloat(sellingUnitPriceStr) || 0,
+    costUnitPrice: parseFloat(costUnitPriceStr) || 0,
+    wholesaleUnitPrice: parseFloat(wholesaleUnitPriceStr) || 0,
+  };
+  const validationFields = ProductFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/product/${editId}`,
+    "PATCH",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/product");
+  return resData;
+};
+
+export const deleteProductService = async (
+  id: string,
+): Promise<ApiResponse> => {
+  const response = await authDelete(`${BACKEND_URL}/product/${id}`);
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/product");
   return resData;
 };

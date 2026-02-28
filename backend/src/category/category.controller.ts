@@ -31,6 +31,7 @@ export class CategoryController {
     return this.categoryService.create(createCategoryDto);
   }
 
+  @Roles(Role.SUPERADMIN, Role.ADMIN, Role.MANAGER)
   @Post('upload-image')
   @UseInterceptors(
     FileInterceptor('file', {

@@ -24,7 +24,7 @@ interface CategoryFormData {
 interface CreateCategoryFormProps {
   onCloseModal?: () => void;
   categoryToEdit?: Partial<Category>;
-  categories?: Category[];
+  categories: Category[];
 }
 
 export default function CreateCategoryForm({
@@ -33,10 +33,13 @@ export default function CreateCategoryForm({
   categories,
 }: CreateCategoryFormProps) {
   const [state, setState] = useState<ApiResponse>();
-  const { id: editId, parent: editiableParent, ...editData } = categoryToEdit;
+  const {
+    id: editId,
+    parentId,
+    parent: editiableParent,
+    ...editData
+  } = categoryToEdit;
   const isEditSession = Boolean(editId);
-
-  if (isEditSession) console.log("Editing category ID:", categoryToEdit);
 
   const filteredCategories = categories?.filter((cat) => cat.id !== editId);
 

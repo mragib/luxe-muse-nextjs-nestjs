@@ -50,12 +50,16 @@ export const createSession = async (payload: session) => {
 
 export const getSession = async () => {
   const cookieStore = (await cookies()).get("session")?.value;
-  if (!cookieStore) return null;
+  // if (!cookieStore) return null;
   try {
-    const data = await getSessionBySessionId(cookieStore);
+    if (cookieStore) {
+      const data = await getSessionBySessionId(cookieStore);
 
-    const { payload } = await jwtVerify(data.session, encodedSecret);
-    return payload as session;
+      const { payload } = await jwtVerify(data.session, encodedSecret);
+      return payload as session;
+    } else {
+      redirect("/auth/signin");
+    }
   } catch (error) {
     console.error("JWT Verification Error:", error);
     redirect("/auth/signin");

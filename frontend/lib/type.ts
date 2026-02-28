@@ -1,4 +1,5 @@
 import z from "zod";
+import { AccountType } from "./constants";
 
 export type FormState =
   | {
@@ -31,7 +32,7 @@ export const SignupFormSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(
       /[^a-zA-Z0-9]/,
-      "Password must contain at least one special character"
+      "Password must contain at least one special character",
     ),
 });
 
@@ -72,14 +73,14 @@ export const UserFormSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(
       /[^a-zA-Z0-9]/,
-      "Password must contain at least one special character"
+      "Password must contain at least one special character",
     ),
 
   phone: z
     .string("Phone number should not be empty")
     .regex(
       /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/,
-      "Provide proper phone number"
+      "Provide proper phone number",
     )
     .trim(),
   address: z.string("Please provide address").trim(),
@@ -120,3 +121,73 @@ export const CategoryFormSchema = z.object({
   is_active: z.boolean(),
   parentId: z.string().nullable().optional(),
 });
+
+export type Attribute = {
+  id: string;
+  name: string;
+  description?: string;
+  is_active: boolean;
+};
+
+export const AttributeFormSchema = z.object({
+  name: z.string().min(2, "Name should be at least 2 characters long").trim(),
+  description: z.string().optional(),
+  is_active: z.boolean(),
+});
+
+export type AttributeValue = {
+  id: string;
+  name: string;
+  description?: string;
+  is_active: boolean;
+  attributeId: string;
+  attribute?: Attribute;
+};
+
+export const AttributeValueFormSchema = z.object({
+  name: z.string().min(1, "Value should be at least 1 character long").trim(),
+  description: z.string().optional(),
+  is_active: z.boolean(),
+  attributeId: z.string(),
+});
+
+export type Product = {
+  id: string;
+  name: string;
+  description?: string;
+  slug: string;
+  sellingUnitPrice: number;
+  costUnitPrice: number;
+  wholesaleUnitPrice: number;
+  image_url?: string;
+  is_active: boolean;
+  unit: string;
+};
+
+export const ProductFormSchema = z.object({
+  name: z.string().min(2, "Name should be at least 2 characters long").trim(),
+  description: z.string().optional(),
+  sellingUnitPrice: z
+    .number()
+    .positive("Selling price must be a positive number"),
+  costUnitPrice: z.number().positive("Cost price must be a positive number"),
+  wholesaleUnitPrice: z
+    .number()
+    .positive("Wholesale price must be a positive number"),
+  image_url: z.string().optional(),
+  is_active: z.boolean(),
+  unit: z.string().min(1, "Unit cannot be empty").trim(),
+});
+
+export type ChartOfAccounting = {
+  id: string;
+  code: number;
+  name: string;
+  gl_type: AccountType;
+  is_leaf: boolean;
+  dr_amount: number;
+  cr_amount: number;
+  parent?: ChartOfAccounting;
+  parentId?: string;
+  child?: ChartOfAccounting[];
+};

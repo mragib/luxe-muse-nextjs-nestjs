@@ -15,6 +15,6 @@ export class ProductLine {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => Product, (product) => product.productLine)
-  products: Product[];
+  // @OneToMany(() => Product, (product) => product.productLine)
+  // products: Product[];
 }

@@ -19,6 +19,7 @@ import { AttributeValueModule } from './attribute-value/attribute-value.module';
 import { ProductImageModule } from './product-image/product-image.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ChartOfAccountingModule } from './chart-of-accounting/chart-of-accounting.module';
 
 @Module({
   imports: [
@@ -51,6 +52,8 @@ import { join } from 'path';
     AttributeValueModule,
 
     ProductImageModule,
+
+    ChartOfAccountingModule,
   ],
   controllers: [AppController],
   providers: [

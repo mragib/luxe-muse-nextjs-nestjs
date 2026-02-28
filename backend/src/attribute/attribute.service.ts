@@ -20,7 +20,12 @@ export class AttributeService {
   async create(createAttributeDto: CreateAttributeDto) {
     try {
       const attribute = await this.attributeRepository.save(createAttributeDto);
-      return attribute;
+      return {
+        status: 'success',
+        statuscode: 200,
+        data: attribute,
+        message: 'Attribute has been created',
+      };
     } catch (error) {
       if (error.errno === 19)
         throw new ConflictException('Attribute is already exist.');
@@ -28,10 +33,17 @@ export class AttributeService {
     }
   }
 
-  findAll() {
-    return this.attributeRepository.find({
+  async findAll() {
+    const [data, count] = await this.attributeRepository.findAndCount({
       relations: ['values'],
     });
+
+    return {
+      status: 'success',
+      statuscode: 200,
+      data: data,
+      count,
+    };
   }
 
   findOne(id: string) {
@@ -44,7 +56,16 @@ export class AttributeService {
   async update(id: string, updateAttributeDto: UpdateAttributeDto) {
     const found = await this.findOne(id);
     if (!found) throw new NotFoundException('Attribute is not found');
-    return this.attributeRepository.save({ id, ...updateAttributeDto });
+    const updatedAttribute = await this.attributeRepository.save({
+      id,
+      ...updateAttributeDto,
+    });
+    return {
+      status: 'success',
+      statuscode: 200,
+      data: updatedAttribute,
+      message: 'Attribute has been updated',
+    };
   }
 
   remove(id: string) {

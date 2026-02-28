@@ -1,0 +1,52 @@
+@adminToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZDljZGRjZC0yN2ZkLTRmZTUtOTlmNS0wYTkzZmU3YjczNGEiLCJpYXQiOjE3NzIxNzA2MzUsImV4cCI6MTc3Mjc3NTQzNX0.ijhqnThfTnDInIaUK3iwDrC8_azNVwyWr_CLwpt8Elg
+@customerToken=
+
+###Sign in as admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+
+###Sign in as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+### Create an attribute ###
+POST http://localhost:8000/attribute
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+"name":"size"
+}
+
+
+### Get all Category
+GET http://localhost:8000/attribute
+
+
+### Get a Category
+GET http://localhost:8000/attribute/61341428-2d7f-43e4-b2f2-3daea45e96f1
+
+### Update a category
+PATCH http://localhost:8000/attribute/61341428-2d7f-43e4-b2f2-3daea45e96f1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    "description":"This is from update"
+}
+
+
+### Delete a category
+DELETE http://localhost:8000/attribute/2e866a2c-0b36-4d32-9c9b-ebad2be9d04e
+Authorization: Bearer {{adminToken}}

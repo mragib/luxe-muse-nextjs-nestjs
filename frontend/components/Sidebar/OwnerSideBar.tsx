@@ -103,7 +103,8 @@ function OwnerSideBar({
               {/* <!-- Menu Item Products --> */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === "/products" || pathname.includes("products")
+                  pathname === "/admin/products" ||
+                  pathname.includes("products")
                 }
               >
                 {(handleClick, open) => {
@@ -112,7 +113,7 @@ function OwnerSideBar({
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-gray-700 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800 ${
-                          (pathname === "/products" ||
+                          (pathname === "/admin/products" ||
                             pathname.includes("products")) &&
                           "bg-gray-200 dark:bg-gray-800"
                         }`}
@@ -178,15 +179,41 @@ function OwnerSideBar({
                           </li>
                           <li>
                             <Link
-                              href="/products/allProducts"
+                              href="/admin/attribute"
                               className={
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
-                                (pathname === "/products/allProducts"
+                                (pathname === "/admin/attribute"
                                   ? "!text-gray-900 dark:!text-white"
                                   : "")
                               }
                             >
-                              Create Product
+                              Attribute
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/admin/attribute-value"
+                              className={
+                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
+                                (pathname === "/admin/attribute-value"
+                                  ? "!text-gray-900 dark:!text-white"
+                                  : "")
+                              }
+                            >
+                              Attribute Value
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/admin/products"
+                              className={
+                                "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
+                                (pathname === "/admin/products"
+                                  ? "!text-gray-900 dark:!text-white"
+                                  : "")
+                              }
+                            >
+                              Products
                             </Link>
                           </li>
                           <li>
@@ -491,7 +518,7 @@ function OwnerSideBar({
               {/* <!-- Menu Item Auth Pages --> */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === "/chart-of-accounting" ||
+                  pathname === "/admin/chart-of-accounting" ||
                   pathname.includes("chart-of-accounting")
                 }
               >
@@ -541,10 +568,10 @@ function OwnerSideBar({
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
-                              href="/chart-of-accounting"
+                              href="/admin/chart-of-accounting"
                               className={
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
-                                (pathname === "/chart-of-accounting"
+                                (pathname === "/admin/chart-of-accounting"
                                   ? "!text-gray-900 dark:!text-white"
                                   : "")
                               }
@@ -554,10 +581,10 @@ function OwnerSideBar({
                           </li>
                           <li>
                             <Link
-                              href="/bank-accounts"
+                              href="/admin/bank-accounts"
                               className={
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
-                                (pathname === "/bank-accounts"
+                                (pathname === "/admin/bank-accounts"
                                   ? "!text-gray-900 dark:!text-white"
                                   : "")
                               }

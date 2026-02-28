@@ -17,18 +17,29 @@ export class CreateProductDto {
   description?: string;
 
   @IsString()
-  @IsNotEmpty()
-  sku: string;
+  @IsOptional()
+  slug?: string;
 
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
-  price: number;
+  sellingUnitPrice: number;
+
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  costUnitPrice: number;
+
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  wholesaleUnitPrice: number;
 
   @IsString()
   @IsOptional()
   image_url?: string;
 
-  @IsUUID()
+  @IsString()
   @IsNotEmpty()
-  productLineId: string;
+  unit: string;
+
+  @IsOptional()
+  is_active?: boolean;
 }

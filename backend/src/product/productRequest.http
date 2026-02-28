@@ -1,0 +1,58 @@
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZDljZGRjZC0yN2ZkLTRmZTUtOTlmNS0wYTkzZmU3YjczNGEiLCJpYXQiOjE3NzIyNTQzNzUsImV4cCI6MTc3Mjg1OTE3NX0.RYBAA_FiFIiLFDuNUJUFqoYdNyuUqtAAIXHuMsqcF30
+
+### Login as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+
+### Login as Admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+
+### Create a product ###
+POST http://localhost:8000/product
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+"name":"Macbook",
+"sellingUnitPrice": 1999.99,
+"costUnitPrice": 1500.00,
+"wholesaleUnitPrice": 1800.00,
+"image_url":"https://example.com/macbook-pro.jpg"
+}
+
+### Get all products ###
+GET http://localhost:8000/product
+
+
+@product_slug = macbook-pro
+@product_id = d5957113-2f21-4276-9433-164392adc69a
+
+
+### Get a product by ID ###
+GET http://localhost:8000/product/{{product_slug}}
+
+### Update a product ###
+PATCH http://localhost:8000/product/{{product_id}}
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "description": "The latest MacBook Pro with M1 chip"
+}
+
+### Delete a product ###
+DELETE http://localhost:8000/product/{{product_id}}
+Authorization: Bearer {{admin_token}}

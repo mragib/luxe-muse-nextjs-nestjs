@@ -1,46 +1,9 @@
+import { getCategory } from "@/lib/data-service";
 import Link from "next/link";
 import React from "react";
 
-const categories = [
-  {
-    id: 1,
-    name: "Women's Fashion",
-    image: "/category-women.jpg",
-    link: "/categories/women",
-  },
-  {
-    id: 2,
-    name: "Men's Fashion",
-    image: "/category-men.jpg",
-    link: "/categories/men",
-  },
-  {
-    id: 3,
-    name: "Accessories",
-    image: "/category-accessories.jpg",
-    link: "/categories/accessories",
-  },
-  {
-    id: 4,
-    name: "Shoes",
-    image: "/category-shoes.jpg",
-    link: "/categories/shoes",
-  },
-  {
-    id: 5,
-    name: "Bags",
-    image: "/category-bags.jpg",
-    link: "/categories/bags",
-  },
-  {
-    id: 6,
-    name: "Jewelry",
-    image: "/category-jewelry.jpg",
-    link: "/categories/jewelry",
-  },
-];
-
-function CategorySection() {
+async function CategorySection() {
+  const { data: categories } = await getCategory();
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +19,7 @@ function CategorySection() {
           {categories.map((category) => (
             <Link
               key={category.id}
-              href={category.link}
+              href={"/categories/" + category.slug}
               className="group text-center"
             >
               <div className="aspect-square bg-gray-100 rounded-full mb-4 overflow-hidden group-hover:scale-105 transition-transform">

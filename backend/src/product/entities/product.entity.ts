@@ -14,28 +14,40 @@ export class Product {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column({ nullable: true })
   description: string;
 
   @Column({ unique: true })
-  sku: string;
+  slug: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  price: number;
+  sellingUnitPrice: number;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  costUnitPrice: number;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  wholesaleUnitPrice: number;
 
   @Column({ nullable: true })
   image_url: string;
 
-  @ManyToOne(() => ProductLine)
-  @JoinColumn({ name: 'productLineId' })
-  productLine: ProductLine;
+  @Column({ default: true })
+  is_active: boolean;
 
   @Column()
-  productLineId: string;
+  unit: string;
 
-  @OneToMany(() => ProductImage, (image) => image.product)
-  images: ProductImage[];
+  // @ManyToOne(() => ProductLine)
+  // @JoinColumn({ name: 'productLineId' })
+  // productLine: ProductLine;
+
+  // @Column()
+  // productLineId: string;
+
+  // @OneToMany(() => ProductImage, (image) => image.product)
+  // images: ProductImage[];
 }

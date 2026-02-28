@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
@@ -34,4 +35,8 @@ export class CreateCategoryDto {
 
   @IsOptional()
   slug?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  is_leaf?: boolean;
 }
