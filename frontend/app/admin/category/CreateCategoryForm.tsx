@@ -8,10 +8,9 @@ import { Input } from "@/components/ui/input";
 import { addCategoryService, updateCategoryService } from "@/lib/data-service";
 import { ApiResponse, APIStatus, Category } from "@/lib/type";
 import { changeForSelectObject } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import Select from "react-select";
 
 interface CategoryFormData {
   name: string;
@@ -19,6 +18,7 @@ interface CategoryFormData {
   image_url: FileList | string;
   parent: { label: string; value: string } | null;
   is_active: boolean;
+  is_leaf: boolean;
 }
 
 interface CreateCategoryFormProps {
@@ -103,7 +103,7 @@ export default function CreateCategoryForm({
       <FormRow label="Name" error={state?.error?.name}>
         <Input type="text" id="name" {...register("name")} />
       </FormRow>
-      <FormRow label="Description" error={state?.error?.descrption}>
+      <FormRow label="Description" error={state?.error?.description}>
         <Input type="text" id="description" {...register("description")} />
       </FormRow>
       <FormRow label="Category Image" error={state?.error?.image_url}>
@@ -138,6 +138,14 @@ export default function CreateCategoryForm({
             />
           )}
         />
+      </FormRow>
+
+      <FormRow label="Leaf" htmlFor="is_leaf">
+        <Input type="checkbox" id="is_leaf" {...register("is_leaf")} />
+
+        {state?.error?.is_leaf && (
+          <p className="text-red-500 text-sm">{state.error.is_leaf}</p>
+        )}
       </FormRow>
 
       <FormRow label="Active" htmlFor="active">

@@ -4,13 +4,13 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import slugify from 'slugify';
+import { ApiResponse } from 'src/types/types';
+import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
-import { IsNull, Repository } from 'typeorm';
-import { ApiResponse } from 'src/types/types';
-import slugify from 'slugify';
 
 @Injectable()
 export class CategoryService {

@@ -53,3 +53,14 @@ export enum DeliveryChargePaidBy {
   CUSTOMER = 'CUSTOMER',
   SALLER = 'SALLER',
 }
+
+export interface CsvChartOfAccountRow {
+  id: string;
+  code: string;
+  name: string;
+  gl_type: AccountType;
+  is_leaf: string;
+  dr_amount: string;
+  cr_amount: string;
+  parentId?: string;
+}

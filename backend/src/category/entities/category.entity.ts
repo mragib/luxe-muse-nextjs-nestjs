@@ -1,7 +1,8 @@
+import { Product } from 'src/product/entities/product.entity';
 import {
   Column,
-  DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
@@ -40,4 +41,7 @@ export class Category {
 
   @Column({ default: false })
   is_leaf: boolean;
+
+  @OneToMany(() => Product, (item) => item.category)
+  product: Product[];
 }

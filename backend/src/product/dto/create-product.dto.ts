@@ -1,9 +1,8 @@
 import {
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
-  IsNumber,
   Min,
 } from 'class-validator';
 
@@ -42,4 +41,12 @@ export class CreateProductDto {
 
   @IsOptional()
   is_active?: boolean;
+
+  @IsString()
+  @IsNotEmpty()
+  brandId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
 }

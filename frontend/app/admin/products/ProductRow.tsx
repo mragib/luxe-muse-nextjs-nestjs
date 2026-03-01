@@ -8,13 +8,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/ui/Modal";
 
-import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
 import ConfirmDelete from "@/components/ui/ConfirmDelete";
-import { Product } from "@/lib/type";
 import { deleteProductService } from "@/lib/data-service";
+import { Brand, Category, Product } from "@/lib/type";
+import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
 import CreateProductForm from "./CreateProductForm";
 
-export default function ProductRow({ product }: { product: Product }) {
+export default function ProductRow({
+  product,
+  categories,
+  brands,
+}: {
+  product: Product;
+  categories: Category[];
+  brands: Brand[];
+}) {
   return (
     <Modal>
       <DropdownMenu>
@@ -42,7 +50,11 @@ export default function ProductRow({ product }: { product: Product }) {
         </DropdownMenuContent>
       </DropdownMenu>
       <Modal.Window name="edit-data">
-        <CreateProductForm productToEdit={product} />
+        <CreateProductForm
+          productToEdit={product}
+          categories={categories}
+          brands={brands}
+        />
       </Modal.Window>
 
       <Modal.Window name="delete-data">

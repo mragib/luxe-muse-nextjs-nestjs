@@ -1,23 +1,25 @@
+import { Transform } from 'class-transformer';
 import {
-  IsNumber,
-  IsNotEmpty,
-  IsString,
-  IsEnum,
   IsBoolean,
-  IsOptional,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsObject,
+  IsOptional,
+  IsString,
 } from 'class-validator';
 import { AccountType } from 'src/common/common.enums';
-import { Chartofaccounting } from '../entities/chart-of-accounting.entity';
+import { ChartOfAccount } from '../entities/chart-of-account.entity';
 
-export class CreateChartOfAccountingDto {
+export class CreateChartOfAccountDto {
   @IsNumber()
   @IsNotEmpty()
   code: number;
 
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }: { value: string }) => value.toLowerCase())
   name: string;
 
   @IsNotEmpty()
@@ -39,5 +41,9 @@ export class CreateChartOfAccountingDto {
 
   @IsOptional()
   @IsObject()
-  parent: Chartofaccounting;
+  parent: ChartOfAccount;
+
+  @IsNumber()
+  @IsOptional()
+  parentId: number;
 }

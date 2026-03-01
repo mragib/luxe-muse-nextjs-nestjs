@@ -1,5 +1,5 @@
 @adminToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZDljZGRjZC0yN2ZkLTRmZTUtOTlmNS0wYTkzZmU3YjczNGEiLCJpYXQiOjE3NzIxNzA2MzUsImV4cCI6MTc3Mjc3NTQzNX0.ijhqnThfTnDInIaUK3iwDrC8_azNVwyWr_CLwpt8Elg
-@customerToken=
+@customerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmODFmYTg4MS01NzQ3LTQxZTMtYTMzYy1iMDVkZmMyNTM1MGMiLCJpYXQiOjE3NzIzMzkxNTUsImV4cCI6MTc3Mjk0Mzk1NX0.Yss97XiLaKPCcOG1lDsX_nLr5KfhTCSmXLRhYv187YM
 
 ###Sign in as admin ###
 POST http://localhost:8000/auth/signin

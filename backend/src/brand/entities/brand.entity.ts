@@ -1,10 +1,12 @@
 import slugify from 'slugify';
+import { Product } from 'src/product/entities/product.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -27,4 +29,7 @@ export class Brand {
 
   @Column({ default: true })
   is_active: boolean;
+
+  @OneToMany(() => Product, (item) => item.brand)
+  product: Product[];
 }

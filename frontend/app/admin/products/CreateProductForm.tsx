@@ -5,16 +5,12 @@ import { CreatableSelect } from "@/components/ui/creatableSelect";
 import Form from "@/components/ui/Form";
 import FormRow from "@/components/ui/FormRow";
 import { Input } from "@/components/ui/input";
+import { TextArea } from "@/components/ui/textarea";
 import { UNITNAME } from "@/lib/constants";
-import {
-  addCategoryService,
-  addProductService,
-  updateCategoryService,
-  updateProductService,
-} from "@/lib/data-service";
-import { ApiResponse, APIStatus, Category, Product } from "@/lib/type";
+import { addProductService, updateProductService } from "@/lib/data-service";
+import { ApiResponse, APIStatus, Brand, Category, Product } from "@/lib/type";
 import { changeForSelectObject } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
@@ -28,20 +24,39 @@ interface ProductFormData {
   costUnitPrice: number;
   wholesaleUnitPrice: number;
   is_active: boolean;
+  category: { label: string; value: string } | null;
+  brand: { label: string; value: string } | null;
 }
 
 interface CreateProductFormProps {
   onCloseModal?: () => void;
   productToEdit?: Partial<Product>;
+  categories: Category[];
+  brands: Brand[];
 }
 
 export default function CreateProductForm({
   productToEdit = {},
   onCloseModal,
+  categories,
+  brands,
 }: CreateProductFormProps) {
   const [state, setState] = useState<ApiResponse>();
-  const { id: editId, ...editData } = productToEdit;
+  console.log("Product to Edit:", productToEdit);
+  const {
+    id: editId,
+    brandId,
+    categoryId,
+    brand: editiableBrand,
+    category: editiableCategory,
+    ...editData
+  } = productToEdit;
   const isEditSession = Boolean(editId);
+
+  if (isEditSession) {
+    console.log(editiableBrand);
+    console.log(editiableCategory);
+  }
 
   const {
     register,
@@ -53,10 +68,11 @@ export default function CreateProductForm({
       ? {
           ...editData,
           unit: editData.unit
-            ? changeForSelectObject({
-                label: editData.unit,
-                value: editData.unit,
-              })
+            ? UNITNAME.find((unit) => unit.value === editData.unit)
+            : null,
+          brand: editiableBrand ? changeForSelectObject(editiableBrand) : null,
+          category: editiableCategory
+            ? changeForSelectObject(editiableCategory)
             : null,
         }
       : {},
@@ -81,6 +97,15 @@ export default function CreateProductForm({
         continue;
       }
 
+      if (key === "category") {
+        formData.append("categoryId", value?.value ?? "");
+        continue;
+      }
+      if (key === "brand") {
+        formData.append("brandId", value?.value ?? "");
+        continue;
+      }
+
       formData.append(key, String(value));
     }
 
@@ -102,83 +127,112 @@ export default function CreateProductForm({
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Name" error={state?.error?.name}>
-        <Input type="text" id="name" {...register("name")} />
-      </FormRow>
-      <FormRow label="Description" error={state?.error?.descrption}>
-        <Input type="text" id="description" {...register("description")} />
-      </FormRow>
-      <FormRow label="Product Image" error={state?.error?.image_url}>
-        <Input
-          type="file"
-          accept="image/*"
-          id="image_url"
-          {...register("image_url")}
-        />
-      </FormRow>
-
-      {isEditSession && productToEdit?.image_url && (
-        <div className="mb-3">
-          <p className="text-sm text-gray-500 mb-1">Current Image</p>
-          <img
-            src={productToEdit.image_url}
-            alt="Product Image"
-            className="h-20 w-20 object-cover rounded"
+      <div className="grid md:grid-cols-2">
+        <FormRow label="Category" error={state?.error?.categoryId}>
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <CreatableSelect
+                {...field}
+                data={categories}
+                placeholder="Select category..."
+              />
+            )}
           />
-        </div>
-      )}
+        </FormRow>
+        <FormRow label="Brand" error={state?.error?.brandId}>
+          <Controller
+            name="brand"
+            control={control}
+            render={({ field }) => (
+              <CreatableSelect
+                {...field}
+                data={brands}
+                placeholder="Select brand..."
+              />
+            )}
+          />
+        </FormRow>
 
-      <FormRow label="Unit" error={state?.error?.unit}>
-        <Controller
-          name="unit"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              options={UNITNAME}
-              placeholder="Select unit..."
+        <FormRow label="Name" error={state?.error?.name}>
+          <Input type="text" id="name" {...register("name")} />
+        </FormRow>
+        <FormRow label="Description" error={state?.error?.description}>
+          <TextArea id="description" {...register("description")} />
+        </FormRow>
+        <FormRow label="Product Image" error={state?.error?.image_url}>
+          <Input
+            type="file"
+            accept="image/*"
+            id="image_url"
+            {...register("image_url")}
+          />
+        </FormRow>
+
+        {isEditSession && productToEdit?.image_url && (
+          <div className="mb-3">
+            <p className="text-sm text-gray-500 mb-1">Current Image</p>
+            <img
+              src={productToEdit.image_url}
+              alt="Product Image"
+              className="h-20 w-20 object-cover rounded"
             />
-          )}
-        />
-      </FormRow>
-
-      <FormRow
-        label="Selling Unit Price"
-        error={state?.error?.sellingUnitPrice}
-      >
-        <Input
-          type="number"
-          id="sellingUnitPrice"
-          {...register("sellingUnitPrice")}
-        />
-      </FormRow>
-
-      <FormRow label="Cost Unit Price" error={state?.error?.costUnitPrice}>
-        <Input
-          type="number"
-          id="costUnitPrice"
-          {...register("costUnitPrice")}
-        />
-      </FormRow>
-
-      <FormRow
-        label="Wholesale Unit Price"
-        error={state?.error?.wholesaleUnitPrice}
-      >
-        <Input
-          type="number"
-          id="wholesaleUnitPrice"
-          {...register("wholesaleUnitPrice")}
-        />
-      </FormRow>
-
-      <FormRow label="Active" htmlFor="active">
-        <Input type="checkbox" id="active" {...register("is_active")} />
-
-        {state?.error?.is_active && (
-          <p className="text-red-500 text-sm">{state.error.is_active}</p>
+          </div>
         )}
-      </FormRow>
+
+        <FormRow label="Unit" error={state?.error?.unit}>
+          <Controller
+            name="unit"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={UNITNAME}
+                placeholder="Select unit..."
+              />
+            )}
+          />
+        </FormRow>
+
+        <FormRow
+          label="Selling Unit Price"
+          error={state?.error?.sellingUnitPrice}
+        >
+          <Input
+            type="number"
+            id="sellingUnitPrice"
+            {...register("sellingUnitPrice")}
+          />
+        </FormRow>
+
+        <FormRow label="Cost Unit Price" error={state?.error?.costUnitPrice}>
+          <Input
+            type="number"
+            id="costUnitPrice"
+            {...register("costUnitPrice")}
+          />
+        </FormRow>
+
+        <FormRow
+          label="Wholesale Unit Price"
+          error={state?.error?.wholesaleUnitPrice}
+        >
+          <Input
+            type="number"
+            id="wholesaleUnitPrice"
+            {...register("wholesaleUnitPrice")}
+          />
+        </FormRow>
+
+        <FormRow label="Active" htmlFor="active">
+          <Input type="checkbox" id="active" {...register("is_active")} />
+
+          {state?.error?.is_active && (
+            <p className="text-red-500 text-sm">{state.error.is_active}</p>
+          )}
+        </FormRow>
+      </div>
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Submitting..." : "Submit"}
       </Button>

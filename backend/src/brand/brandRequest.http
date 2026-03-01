@@ -1,4 +1,4 @@
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZDljZGRjZC0yN2ZkLTRmZTUtOTlmNS0wYTkzZmU3YjczNGEiLCJpYXQiOjE3NzIxMDYxNjcsImV4cCI6MTc3MjcxMDk2N30.B4XIDHdLwSQYHQ8iL0YxZf3Ib3lcUcXStc4hYtT55lM
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzIzNDE3ODAsImV4cCI6MTc3Mjk0NjU4MH0.X9lpbbYWUfUTwKk3lVKeuaRFVU-OmmdqRZt411yXM9w
 @customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiOGEzMjlhNi02ODE3LTQ0NWUtYTBmZi05NTJkOGVkZmY1YzAiLCJpYXQiOjE3NTk2Nzg1MjMsImV4cCI6MTc2MDI4MzMyM30.HTrbpWoFNl0I5Z6e2ZqcqI6QmkBH3qfMGXEcKDrnlNs
 
 ### Login as customer ###
@@ -28,8 +28,8 @@ Authorization: Bearer {{admin_token}}
 
 {
     "name":"tango yankee",
-    "description":"This is a test",
-    "image_url":"http://localhost:8000/brand/1687504414218-tango-yankee.jpg"
+    "description":"This is a test"
+    
 }
 
 
@@ -51,5 +51,5 @@ Authorization: Bearer {{admin_token}}
 
 ### Delete a brand ###
 
-DELETE http://localhost:8000/brand/4f992fc3-e4d8-43df-90be-e030ae57a3fa
+DELETE http://localhost:8000/brand/18956c46-b573-47b4-b497-87d07f8f3b37
 Authorization: Bearer {{admin_token}}

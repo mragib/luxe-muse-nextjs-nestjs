@@ -3,15 +3,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
   TreeParent,
 } from 'typeorm';
-@Entity('ledger')
+
+@Entity()
 @Tree('materialized-path')
-export class Chartofaccounting {
+export class ChartOfAccount {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -34,10 +34,13 @@ export class Chartofaccounting {
   cr_amount: number;
 
   @TreeParent({ onDelete: 'CASCADE' })
-  parent: Chartofaccounting;
+  parent: ChartOfAccount;
+
+  @Column()
+  parentId: number;
 
   @TreeChildren()
-  child: Chartofaccounting[];
+  child: ChartOfAccount[];
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,14 +1,16 @@
 "use client";
-import BrandRow from "@/app/admin/brands/BrandRow";
 import ProductRow from "@/app/admin/products/ProductRow";
 import { Button } from "@/components/ui/button";
-import { Product } from "@/lib/type";
+import { Brand, Category, Product } from "@/lib/type";
 import { capitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 
-export const columns: ColumnDef<Product>[] = [
+export const getColumns = (
+  categories: Category[],
+  brands: Brand[],
+): ColumnDef<Product>[] => [
   {
     header: "#",
     accessorKey: "index",
@@ -34,10 +36,15 @@ export const columns: ColumnDef<Product>[] = [
   {
     id: "description",
     accessorKey: "description",
+    cell: ({ row }) => (
+      <div className="max-w-[250px] truncate">
+        {row.getValue("description")}
+      </div>
+    ),
     header: ({ column }) => {
       return (
         <Button
-          className="text-sm md:text-md font-bold uppercase"
+          className="text-sm md:text-md font-bold uppercase "
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
@@ -153,7 +160,9 @@ export const columns: ColumnDef<Product>[] = [
     id: "actions",
     cell: ({ row }) => {
       const data = row.original;
-      return <ProductRow product={data} />;
+      return (
+        <ProductRow product={data} brands={brands} categories={categories} />
+      );
     },
   },
 ];

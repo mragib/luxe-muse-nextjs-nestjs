@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -9,6 +10,7 @@ import {
 export class CreateAttributeValueDto {
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }: { value: string }) => value.toLowerCase())
   name: string;
 
   @IsString()

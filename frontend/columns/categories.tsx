@@ -86,7 +86,24 @@ export const getCategoryColumns = (
     },
   },
   {
-    id: "block",
+    id: "leaf",
+    accessorKey: "is_leaf",
+    cell: ({ row }) => (row.original.is_leaf ? "✔" : "❌"),
+    header: ({ column }) => {
+      return (
+        <Button
+          className="text-sm md:text-md font-bold uppercase"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Leaf
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    id: "active",
     accessorKey: "is_active",
     cell: ({ row }) => (row.original.is_active ? "✔" : "❌"),
     header: ({ column }) => {

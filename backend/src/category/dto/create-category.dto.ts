@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -11,6 +12,7 @@ import { Category } from '../entities/category.entity';
 export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }: { value: string }) => value.toLowerCase())
   name: string;
 
   @IsString()

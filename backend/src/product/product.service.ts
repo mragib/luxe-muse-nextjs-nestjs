@@ -4,12 +4,12 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import slugify from 'slugify';
+import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
-import slugify from 'slugify';
 
 @Injectable()
 export class ProductService {
@@ -33,7 +33,6 @@ export class ProductService {
         message: 'Product has been created',
       };
     } catch (error) {
-      console.error(error);
       if (error.errno === 19)
         throw new ConflictException('Product is already exist.');
       throw new InternalServerErrorException('Something went wrong!🔥');
@@ -41,7 +40,9 @@ export class ProductService {
   }
 
   async findAll() {
-    const [product, count] = await this.productRepository.findAndCount();
+    const [product, count] = await this.productRepository.findAndCount({
+      relations: ['brand', 'category'],
+    });
     return {
       status: 'success',
       statuscode: 200,

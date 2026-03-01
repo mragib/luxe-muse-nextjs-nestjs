@@ -1,13 +1,6 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-  OneToMany,
-} from 'typeorm';
-import { ProductLine } from '../../product-line/entities/product-line.entity';
-import { ProductImage } from '../../product-image/entities/product-image.entity';
+import { Brand } from 'src/brand/entities/brand.entity';
+import { Category } from 'src/category/entities/category.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Product {
@@ -40,6 +33,17 @@ export class Product {
 
   @Column()
   unit: string;
+
+  @ManyToOne(() => Brand, (item) => item.product)
+  brand: Brand;
+
+  @Column()
+  brandId: string;
+
+  @ManyToOne(() => Category, (item) => item.product)
+  category: Category;
+  @Column()
+  categoryId: string;
 
   // @ManyToOne(() => ProductLine)
   // @JoinColumn({ name: 'productLineId' })

@@ -4,7 +4,7 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class CreateBrandDto {
   @IsString()
   @IsNotEmpty()
-  @Transform((param) => param.value.toLowerCase())
+  @Transform(({ value }: { value: string }) => value.toLowerCase())
   name: string;
 
   @IsString()

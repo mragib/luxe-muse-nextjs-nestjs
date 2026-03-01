@@ -112,14 +112,16 @@ export type Category = {
   parentId?: string;
   is_active: boolean;
   children?: Category[];
+  is_leaf: boolean;
 };
 
 export const CategoryFormSchema = z.object({
   name: z.string().min(2, "Name should be at least 2 characters long").trim(),
-  description: z.string().optional(),
+  description: z.string().nullable().optional(),
   image_url: z.string().optional(),
   is_active: z.boolean(),
   parentId: z.string().nullable().optional(),
+  is_leaf: z.boolean(),
 });
 
 export type Attribute = {
@@ -162,6 +164,10 @@ export type Product = {
   image_url?: string;
   is_active: boolean;
   unit: string;
+  brandId: string;
+  brand?: Brand;
+  categoryId: string;
+  category?: Category;
 };
 
 export const ProductFormSchema = z.object({
@@ -177,6 +183,8 @@ export const ProductFormSchema = z.object({
   image_url: z.string().optional(),
   is_active: z.boolean(),
   unit: z.string().min(1, "Unit cannot be empty").trim(),
+  categoryId: z.string(),
+  brandId: z.string(),
 });
 
 export type ChartOfAccounting = {

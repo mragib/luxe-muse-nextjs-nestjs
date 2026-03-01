@@ -1,11 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { BACKEND_URL } from "@/lib/constants";
-import { getSession } from "./session";
 import { refreshToken } from "@/action/auth";
+import { BACKEND_URL } from "@/lib/constants";
+import { revalidatePath } from "next/cache";
+import { getSession } from "./session";
 import {
-  AdminUser,
   ApiResponse,
   APIStatus,
   AttributeFormSchema,
@@ -542,11 +541,14 @@ export const addCategoryService = async (
   data: FormData,
 ): Promise<ApiResponse> => {
   const name = data.get("name") as string;
-  const description = data.get("description") as string;
+  const description = (data.get("description") as string) || null;
   const image = data.get("image");
   let parentId = data.get("parentId");
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
+
+  const is_leaf =
+    data.get("is_leaf") === "true" || data.get("is_leaf") === "on";
 
   // ✅ Normalize parentId
   if (!parentId || parentId === "undefined" || parentId === "") {
@@ -590,6 +592,7 @@ export const addCategoryService = async (
     description,
     is_active,
     parentId,
+    is_leaf,
   };
 
   if (image_url) {
@@ -628,11 +631,13 @@ export const updateCategoryService = async (
   data: FormData,
 ): Promise<ApiResponse> => {
   const name = data.get("name") as string;
-  const description = data.get("description") as string;
+  const description = (data.get("description") as string) || null;
   const image = data.get("image");
   let parentId = data.get("parentId");
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
+  const is_leaf =
+    data.get("is_leaf") === "true" || data.get("is_leaf") === "on";
 
   // ✅ Normalize parentId
   if (!parentId || parentId === "undefined" || parentId === "") {
@@ -676,6 +681,7 @@ export const updateCategoryService = async (
     description,
     is_active,
     parentId,
+    is_leaf,
   };
 
   if (image_url) {
@@ -907,6 +913,9 @@ export const addProductService = async (
   state: ApiResponse,
   data: FormData,
 ): Promise<ApiResponse> => {
+  const categoryId = data.get("categoryId");
+  const brandId = data.get("brandId");
+
   const name = data.get("name") as string;
   const description = data.get("description") as string;
   const image = data.get("image");
@@ -953,6 +962,8 @@ export const addProductService = async (
     image_url,
     unit,
     is_active,
+    categoryId,
+    brandId,
     sellingUnitPrice: parseFloat(sellingUnitPriceStr) || 0,
     costUnitPrice: parseFloat(costUnitPriceStr) || 0,
     wholesaleUnitPrice: parseFloat(wholesaleUnitPriceStr) || 0,
@@ -986,6 +997,8 @@ export const updateProductService = async (
   editId: string,
   data: FormData,
 ): Promise<ApiResponse> => {
+  const categoryId = data.get("categoryId");
+  const brandId = data.get("brandId");
   const name = data.get("name") as string;
   const description = data.get("description") as string;
   const image = data.get("image");
@@ -1025,6 +1038,8 @@ export const updateProductService = async (
   }
 
   const payload: any = {
+    categoryId,
+    brandId,
     name,
     description,
     unit,
