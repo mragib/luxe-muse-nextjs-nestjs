@@ -568,15 +568,15 @@ function OwnerSideBar({
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
-                              href="/admin/chart-of-accounting"
+                              href="/admin/chart-of-account"
                               className={
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
-                                (pathname === "/admin/chart-of-accounting"
+                                (pathname === "/admin/chart-of-account"
                                   ? "!text-gray-900 dark:!text-white"
                                   : "")
                               }
                             >
-                              Chart of accounting
+                              Chart of accounts
                             </Link>
                           </li>
                           <li>

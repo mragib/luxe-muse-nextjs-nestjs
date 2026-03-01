@@ -12,7 +12,7 @@ import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
 import ConfirmDelete from "@/components/ui/ConfirmDelete";
 import { Category } from "@/lib/type";
 import { deleteCategoryService } from "@/lib/data-service";
-import CreateCategoryForm from "./CreateChartOfAccountingForm";
+import CreateCategoryForm from "./CreateChartOfAccountForm";
 
 export default function CategoryRow({
   category,

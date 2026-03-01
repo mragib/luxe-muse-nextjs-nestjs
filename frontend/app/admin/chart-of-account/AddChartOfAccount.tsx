@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import CreateCategoryForm from "./CreateChartOfAccountingForm";
+import CreateCategoryForm from "./CreateChartOfAccountForm";
 import Modal from "@/components/ui/Modal";
 import { Button } from "@/components/ui/button";
 import { ChartOfAccounting } from "@/lib/type";

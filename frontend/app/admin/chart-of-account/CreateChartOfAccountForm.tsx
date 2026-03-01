@@ -5,16 +5,16 @@ import { CreatableSelect } from "@/components/ui/creatableSelect";
 import Form from "@/components/ui/Form";
 import FormRow from "@/components/ui/FormRow";
 import { Input } from "@/components/ui/input";
-import { AccountType, AccountTypeForSelect } from "@/lib/constants";
+import { AccountTypeForSelect } from "@/lib/constants";
 import { addCategoryService, updateCategoryService } from "@/lib/data-service";
-import { ApiResponse, APIStatus, Category } from "@/lib/type";
+import { ApiResponse, APIStatus, ChartOfAccount } from "@/lib/type";
 import { changeForSelectObject } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Select from "react-select";
 
-interface ChartOfAccountingFormData {
+interface ChartOfAccountFormData {
   code: number;
   name: string;
   description: string;
@@ -26,34 +26,32 @@ interface ChartOfAccountingFormData {
   cr_amount: number;
 }
 
-interface CreateCategoryFormProps {
+interface CreateChartOfAccountFormProps {
   onCloseModal?: () => void;
-  categoryToEdit?: Partial<Category>;
-  categories: Category[];
+  chartOfAccountToEdit?: Partial<ChartOfAccount>;
+  chartOfAccounts: ChartOfAccount[];
 }
 
-export default function CreateChartOfAccountingForm({
-  categoryToEdit = {},
+export default function CreateChartOfAccountForm({
+  chartOfAccountToEdit = {},
   onCloseModal,
-  categories,
-}: CreateCategoryFormProps) {
+  chartOfAccounts,
+}: CreateChartOfAccountFormProps) {
   const [state, setState] = useState<ApiResponse>();
   const {
     id: editId,
     parentId,
     parent: editiableParent,
     ...editData
-  } = categoryToEdit;
+  } = chartOfAccountToEdit;
   const isEditSession = Boolean(editId);
-
-  const filteredCategories = categories?.filter((cat) => cat.id !== editId);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<ChartOfAccountingFormData>({
+  } = useForm<ChartOfAccountFormData>({
     defaultValues: isEditSession
       ? {
           ...editData,

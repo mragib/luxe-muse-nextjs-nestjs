@@ -187,15 +187,15 @@ export const ProductFormSchema = z.object({
   brandId: z.string(),
 });
 
-export type ChartOfAccounting = {
-  id: string;
+export type ChartOfAccount = {
+  id: number;
   code: number;
   name: string;
   gl_type: AccountType;
   is_leaf: boolean;
   dr_amount: number;
   cr_amount: number;
-  parent?: ChartOfAccounting;
+  parent?: ChartOfAccount;
   parentId?: string;
-  child?: ChartOfAccounting[];
+  child?: ChartOfAccount[];
 };
