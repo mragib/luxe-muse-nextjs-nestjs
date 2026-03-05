@@ -36,11 +36,14 @@ export class ChartOfAccount {
   @TreeParent({ onDelete: 'CASCADE' })
   parent: ChartOfAccount;
 
-  @Column()
-  parentId: number;
+  @Column({ nullable: true })
+  parentId: number | null;
 
   @TreeChildren()
   child: ChartOfAccount[];
+
+  @Column({ default: true })
+  is_active: boolean;
 
   @CreateDateColumn()
   created_at: Date;

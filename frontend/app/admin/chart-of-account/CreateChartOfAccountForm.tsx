@@ -6,7 +6,10 @@ import Form from "@/components/ui/Form";
 import FormRow from "@/components/ui/FormRow";
 import { Input } from "@/components/ui/input";
 import { AccountTypeForSelect } from "@/lib/constants";
-import { addCategoryService, updateCategoryService } from "@/lib/data-service";
+import {
+  addChartOfAccountService,
+  updateChartOfAccountService,
+} from "@/lib/data-service";
 import { ApiResponse, APIStatus, ChartOfAccount } from "@/lib/type";
 import { changeForSelectObject } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -24,6 +27,7 @@ interface ChartOfAccountFormData {
   gl_type: { label: string; value: string } | null;
   dr_amount: number;
   cr_amount: number;
+  is_leaf: boolean;
 }
 
 interface CreateChartOfAccountFormProps {
@@ -45,6 +49,9 @@ export default function CreateChartOfAccountForm({
     ...editData
   } = chartOfAccountToEdit;
   const isEditSession = Boolean(editId);
+  const filteredChartofAccount = chartOfAccounts?.filter(
+    (cat) => cat.id !== editId,
+  );
 
   const {
     register,
@@ -55,6 +62,9 @@ export default function CreateChartOfAccountForm({
     defaultValues: isEditSession
       ? {
           ...editData,
+          gl_type: editData.gl_type
+            ? AccountTypeForSelect.find((opt) => opt.value === editData.gl_type)
+            : null,
           parent: editiableParent
             ? changeForSelectObject(editiableParent)
             : null,
@@ -68,14 +78,6 @@ export default function CreateChartOfAccountForm({
     for (const key in data) {
       const value = data[key];
 
-      // ✅ File upload
-      if (key === "image_url") {
-        if (value instanceof FileList && value.length > 0) {
-          formData.append("image", value[0]);
-        }
-        continue;
-      }
-
       // ✅ Parent mapping (VERY IMPORTANT FIX)
       if (key === "parent") {
         formData.append("parentId", value?.value || "");
@@ -86,8 +88,8 @@ export default function CreateChartOfAccountForm({
     }
 
     const result = editId
-      ? await updateCategoryService(undefined, editId, formData)
-      : await addCategoryService(undefined, formData);
+      ? await updateChartOfAccountService(undefined, editId, formData)
+      : await addChartOfAccountService(undefined, formData);
 
     setState(result);
   };
@@ -119,45 +121,46 @@ export default function CreateChartOfAccountForm({
           }}
         />
       </FormRow>
-      <FormRow label="Parent" error={errors?.parent?.message}>
+      <FormRow label="Parent" error={state?.error?.parentId}>
         <Controller
           name="parent"
           control={control}
           render={({ field: { ref, ...field } }) => (
             <CreatableSelect
               {...field}
-              data={filteredChartofAccounting}
+              data={filteredChartofAccount}
               refs={ref}
               multiple={false}
             />
           )}
         />
       </FormRow>
-      <FormRow label="Leaf" error={errors?.status?.message}>
-        {/* <Input type="checkbox" id="status" disabled={isWorking} /> */}
-        <Controller
-          name="status"
-          control={control}
-          render={({ field }) => (
-            <Input
-              type="checkbox"
-              id="status"
-              {...field}
-              checked={field.value}
-            />
-          )}
-        />
-      </FormRow>
-      <FormRow label="Debit" error={errors?.dr_amount?.message}>
+
+      <FormRow label="Debit" error={state?.error?.dr_amount}>
         <Input type="number" step=".01" id="id" {...register("dr_amount")} />
       </FormRow>
-      <FormRow label="Credit" error={errors?.cr_amount?.message}>
+      <FormRow label="Credit" error={state?.error?.cr_amount}>
         <Input
           type="number"
           step=".01"
           id="cr_amount"
           {...register("cr_amount")}
         />
+      </FormRow>
+
+      <FormRow label="Leaf" htmlFor="is_leaf">
+        <Input type="checkbox" id="is_leaf" {...register("is_leaf")} />
+
+        {state?.error?.is_leaf && (
+          <p className="text-red-500 text-sm">{state.error.is_leaf}</p>
+        )}
+      </FormRow>
+      <FormRow label="Active" htmlFor="is_active">
+        <Input type="checkbox" id="is_active" {...register("is_active")} />
+
+        {state?.error?.is_active && (
+          <p className="text-red-500 text-sm">{state.error.is_active}</p>
+        )}
       </FormRow>
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Submitting..." : "Submit"}

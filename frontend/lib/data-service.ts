@@ -13,6 +13,7 @@ import {
   BrandFormSchema,
   Category,
   CategoryFormSchema,
+  ChartOfAccountFormSchema,
   Product,
   ProductFormSchema,
   UserFormSchema,
@@ -1074,5 +1075,125 @@ export const deleteProductService = async (
   const response = await authDelete(`${BACKEND_URL}/product/${id}`);
   const resData = await response.json();
   if (response.ok) revalidatePath("/admin/product");
+  return resData;
+};
+
+//chart of account services
+export const getChartOfAccount = async (): Promise<ApiResponse> => {
+  const response = await authFetch(`${BACKEND_URL}/chart-of-account`);
+  const data = await response.json();
+
+  return data;
+};
+
+export const addChartOfAccountService = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const code = data.get("code") as string;
+  let parentId = data.get("parentId");
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+  const gl_type = data.get("gl_type") as string;
+
+  // ✅ Normalize parentId
+  if (!parentId || parentId === "undefined" || parentId === "") {
+    parentId = null;
+  } else {
+    parentId = parentId.toString();
+  }
+  const payload: any = {
+    name,
+    code,
+    parentId,
+    is_active,
+    gl_type,
+  };
+  const validationFields = ChartOfAccountFormSchema.safeParse(payload);
+  console.log("Validation Result:", validationFields);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/chart-of-account`,
+    "POST",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/chart-of-account");
+  return resData;
+};
+
+export const updateChartOfAccountService = async (
+  state: ApiResponse,
+  editId: number,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const name = data.get("name") as string;
+  const code = data.get("code") as string;
+  let parentId = data.get("parentId");
+  const is_active =
+    data.get("is_active") === "true" || data.get("is_active") === "on";
+  const gl_type = data.get("gl_type") as string;
+  // ✅ Normalize parentId
+  if (!parentId || parentId === "undefined" || parentId === "") {
+    parentId = null;
+  } else {
+    parentId = parentId.toString();
+  }
+  const payload: any = {
+    name,
+    code,
+    parentId,
+    is_active,
+    gl_type,
+  };
+  const validationFields = ChartOfAccountFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/chart-of-account/${editId}`,
+    "PATCH",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/chart-of-account");
+  return resData;
+};
+
+export const deleteChartOfAccountService = async (
+  id: number,
+): Promise<ApiResponse> => {
+  const response = await authDelete(`${BACKEND_URL}/chart-of-account/${id}`);
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/chart-of-account");
+  return resData;
+};
+
+export const InsertInitialChartOfAccount = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const file = data.get("file") as File;
+  const formData = new FormData();
+  formData.append("file", file);
+  const response = await authFileUpload(
+    `${BACKEND_URL}/chart-of-account/upload-csv`,
+    formData,
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/chart-of-account");
   return resData;
 };

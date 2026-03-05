@@ -8,18 +8,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/ui/Modal";
 
-import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
 import ConfirmDelete from "@/components/ui/ConfirmDelete";
-import { Category } from "@/lib/type";
-import { deleteCategoryService } from "@/lib/data-service";
-import CreateCategoryForm from "./CreateChartOfAccountForm";
+import { deleteChartOfAccountService } from "@/lib/data-service";
+import { ChartOfAccount } from "@/lib/type";
+import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
+import CreateChartOfAccountForm from "./CreateChartOfAccountForm";
 
-export default function CategoryRow({
-  category,
-  categories,
+export default function ChartOfAccountRow({
+  chartOfAccount,
+  chartOfAccounts,
 }: {
-  category: Category;
-  categories?: Category[];
+  chartOfAccount: ChartOfAccount;
+  chartOfAccounts: ChartOfAccount[];
 }) {
   return (
     <Modal>
@@ -48,16 +48,18 @@ export default function CategoryRow({
         </DropdownMenuContent>
       </DropdownMenu>
       <Modal.Window name="edit-data">
-        <CreateCategoryForm categoryToEdit={category} categories={categories} />
+        <CreateChartOfAccountForm
+          chartOfAccounts={chartOfAccounts}
+          chartOfAccountToEdit={chartOfAccount}
+        />
       </Modal.Window>
 
       <Modal.Window name="delete-data">
         <ConfirmDelete
-          resource="category"
-          onConfirm={() => {
-            deleteCategoryService(category.id);
-          }}
+          resource="Chart of Account"
+          onConfirm={() => deleteChartOfAccountService(chartOfAccount.id)}
           disabled={false}
+          onCloseModal={undefined}
         />
       </Modal.Window>
     </Modal>

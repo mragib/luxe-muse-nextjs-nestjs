@@ -63,7 +63,7 @@ export class ChartOfAccountController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads/chart-of-accounting', // Path where files will be temporarily stored
+        destination: './uploads/chart-of-accounts', // Path where files will be temporarily stored
         filename: (req, file, cb) => {
           const fileExtName = extname(file.originalname);
           const randomName = Array(12)
@@ -76,7 +76,7 @@ export class ChartOfAccountController {
     }),
   )
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    const filePath = `./uploads/chart-of-accounting/${file.filename}`;
+    const filePath = `./uploads/chart-of-accounts/${file.filename}`;
     try {
       await this.chartOfAccountService.parseCsvAndInsertData(filePath);
       return {

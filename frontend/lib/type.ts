@@ -199,3 +199,14 @@ export type ChartOfAccount = {
   parentId?: string;
   child?: ChartOfAccount[];
 };
+
+export const ChartOfAccountFormSchema = z.object({
+  code: z.number().positive("Code must be a positive number"),
+  name: z.string().min(2, "Name should be at least 2 characters long").trim(),
+  description: z.string().optional(),
+  parentId: z.string().nullable().optional(),
+  is_active: z.boolean(),
+  gl_type: z.enum(AccountType, "Please select a valid account type"),
+  dr_amount: z.number().nonnegative("Debit amount cannot be negative"),
+  cr_amount: z.number().nonnegative("Credit amount cannot be negative"),
+});

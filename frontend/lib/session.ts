@@ -3,8 +3,8 @@
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Role } from "./type";
 import { createSessionDB, getSessionBySessionId } from "./data-service";
+import { Role } from "./type";
 
 export type session = {
   user: {
@@ -50,7 +50,7 @@ export const createSession = async (payload: session) => {
 
 export const getSession = async () => {
   const cookieStore = (await cookies()).get("session")?.value;
-  // if (!cookieStore) return null;
+  if (!cookieStore) return null;
   try {
     if (cookieStore) {
       const data = await getSessionBySessionId(cookieStore);

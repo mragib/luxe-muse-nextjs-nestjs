@@ -1,23 +1,22 @@
 "use client";
 
-import React from "react";
-import CreateCategoryForm from "./CreateChartOfAccountForm";
 import Modal from "@/components/ui/Modal";
 import { Button } from "@/components/ui/button";
-import { ChartOfAccounting } from "@/lib/type";
+import { ChartOfAccount } from "@/lib/type";
+import CreateChartOfAccountForm from "./CreateChartOfAccountForm";
 
-export default function AddChartOfAccounting({
+export default function AddChartOfAccount({
   prevdata,
 }: {
-  prevdata: ChartOfAccounting[];
+  prevdata: ChartOfAccount[];
 }) {
   return (
     <Modal>
       <Modal.Open opens="form">
-        <Button>Add a Chart of Accounting</Button>
+        <Button>Add a Chart of Account</Button>
       </Modal.Open>
       <Modal.Window name="form">
-        <CreateCategoryForm categories={prevdata} />
+        <CreateChartOfAccountForm chartOfAccounts={prevdata} />
       </Modal.Window>
     </Modal>
   );

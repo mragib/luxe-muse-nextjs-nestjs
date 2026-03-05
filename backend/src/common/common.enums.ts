@@ -63,4 +63,5 @@ export interface CsvChartOfAccountRow {
   dr_amount: string;
   cr_amount: string;
   parentId?: string;
+  is_active: string;
 }

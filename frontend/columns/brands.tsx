@@ -1,7 +1,6 @@
 "use client";
 
 import BrandRow from "@/app/admin/brands/BrandRow";
-import { UserRow } from "@/app/admin/users/UserRow";
 import { Button } from "@/components/ui/button";
 import { Brand } from "@/lib/type";
 import { capitalize } from "@/lib/utils";

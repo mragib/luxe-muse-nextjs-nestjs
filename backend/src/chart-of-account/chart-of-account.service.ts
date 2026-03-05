@@ -84,19 +84,32 @@ export class ChartOfAccountService {
   async parseCsvAndInsertData(filePath: string): Promise<void> {
     const results: Partial<ChartOfAccount>[] = [];
 
+    function toNullableNumber(value?: string): number | null {
+      if (!value) return null;
+
+      const trimmed = value.trim();
+      if (trimmed === '') return null;
+
+      const num = Number(trimmed);
+      return Number.isNaN(num) ? null : num;
+    }
+
     await new Promise<void>((resolve, reject) => {
       fs.createReadStream(filePath)
         .pipe(csv())
         .on('data', (data: CsvChartOfAccountRow) => {
+          console.log('Parsed CSV row:', data.parentId); // Debug log to check the parsed data
           const formattedData: Partial<ChartOfAccount> = {
             id: Number(data.id),
             code: Number(data.code),
             name: data.name?.toLowerCase(),
             gl_type: data.gl_type,
             is_leaf: data.is_leaf === '1',
-            dr_amount: Number(data.dr_amount) || 0,
-            cr_amount: Number(data.cr_amount) || 0,
-            parentId: data.parentId ? Number(data.parentId) : undefined,
+
+            dr_amount: toNullableNumber(data.dr_amount) ?? 0,
+            cr_amount: toNullableNumber(data.cr_amount) ?? 0,
+
+            parentId: toNullableNumber(data.parentId),
           };
 
           results.push(formattedData);

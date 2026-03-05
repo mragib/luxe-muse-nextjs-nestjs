@@ -1,9 +1,8 @@
-import { AdminPageHeader } from "@/components/Header/AdminPageHeader";
-import React from "react";
-import { AddBrand } from "./AddBrand";
-import { getBrands } from "@/lib/data-service";
-import DataTable from "@/components/ui/DataTable";
 import { columns } from "@/columns/brands";
+import { AdminPageHeader } from "@/components/Header/AdminPageHeader";
+import DataTable from "@/components/ui/DataTable";
+import { getBrands } from "@/lib/data-service";
+import { AddBrand } from "./AddBrand";
 
 const Brands = async () => {
   const { data: brands } = await getBrands();

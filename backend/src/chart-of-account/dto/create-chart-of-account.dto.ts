@@ -46,4 +46,8 @@ export class CreateChartOfAccountDto {
   @IsNumber()
   @IsOptional()
   parentId: number;
+
+  @IsBoolean()
+  @IsOptional()
+  is_active: boolean;
 }
