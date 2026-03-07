@@ -924,10 +924,6 @@ export const addProductService = async (
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
 
-  const sellingUnitPriceStr = data.get("sellingUnitPrice") as string;
-  const costUnitPriceStr = data.get("costUnitPrice") as string;
-  const wholesaleUnitPriceStr = data.get("wholesaleUnitPrice") as string;
-
   let image_url: string | undefined = undefined;
 
   // ✅ Upload image only if selected
@@ -965,10 +961,12 @@ export const addProductService = async (
     is_active,
     categoryId,
     brandId,
-    sellingUnitPrice: parseFloat(sellingUnitPriceStr) || 0,
-    costUnitPrice: parseFloat(costUnitPriceStr) || 0,
-    wholesaleUnitPrice: parseFloat(wholesaleUnitPriceStr) || 0,
+    // sellingUnitPrice: parseFloat(sellingUnitPriceStr) || 0,
+    // costUnitPrice: parseFloat(costUnitPriceStr) || 0,
+    // wholesaleUnitPrice: parseFloat(wholesaleUnitPriceStr) || 0,
   };
+
+  console.log("payload", payload);
 
   const validationFields = ProductFormSchema.safeParse(payload);
 
@@ -1006,9 +1004,9 @@ export const updateProductService = async (
   const unit = data.get("unit") as string | null;
   const is_active =
     data.get("is_active") === "true" || data.get("is_active") === "on";
-  const sellingUnitPriceStr = data.get("sellingUnitPrice") as string;
-  const costUnitPriceStr = data.get("costUnitPrice") as string;
-  const wholesaleUnitPriceStr = data.get("wholesaleUnitPrice") as string;
+  // const sellingUnitPriceStr = data.get("sellingUnitPrice") as string;
+  // const costUnitPriceStr = data.get("costUnitPrice") as string;
+  // const wholesaleUnitPriceStr = data.get("wholesaleUnitPrice") as string;
 
   let image_url: string | undefined = undefined;
 
@@ -1046,9 +1044,6 @@ export const updateProductService = async (
     unit,
     is_active,
     image_url,
-    sellingUnitPrice: parseFloat(sellingUnitPriceStr) || 0,
-    costUnitPrice: parseFloat(costUnitPriceStr) || 0,
-    wholesaleUnitPrice: parseFloat(wholesaleUnitPriceStr) || 0,
   };
   const validationFields = ProductFormSchema.safeParse(payload);
   if (!validationFields.success) {
@@ -1090,43 +1085,34 @@ export const addChartOfAccountService = async (
   state: ApiResponse,
   data: FormData,
 ): Promise<ApiResponse> => {
-  const name = data.get("name") as string;
-  const code = data.get("code") as string;
-  let parentId = data.get("parentId");
-  const is_active =
-    data.get("is_active") === "true" || data.get("is_active") === "on";
-  const gl_type = data.get("gl_type") as string;
+  // ✅ Convert FormData → plain object
+  const payload = Object.fromEntries(data.entries());
 
-  // ✅ Normalize parentId
-  if (!parentId || parentId === "undefined" || parentId === "") {
-    parentId = null;
-  } else {
-    parentId = parentId.toString();
-  }
-  const payload: any = {
-    name,
-    code,
-    parentId,
-    is_active,
-    gl_type,
-  };
-  const validationFields = ChartOfAccountFormSchema.safeParse(payload);
-  console.log("Validation Result:", validationFields);
-  if (!validationFields.success) {
+  // ✅ Validate + transform using Zod
+  const validation = ChartOfAccountFormSchema.safeParse(payload);
+
+  if (!validation.success) {
     return {
-      error: validationFields.error.flatten().fieldErrors,
+      error: validation.error.flatten().fieldErrors,
       status: APIStatus.FAIL,
       statusCode: 400,
       message: "",
     };
   }
+
+  // ✅ Send validated & typed data
   const response = await authPostOrPatch(
     `${BACKEND_URL}/chart-of-account`,
     "POST",
-    JSON.stringify(validationFields.data),
+    JSON.stringify(validation.data),
   );
+
   const resData = await response.json();
-  if (response.ok) revalidatePath("/admin/chart-of-account");
+
+  if (response.ok) {
+    revalidatePath("/admin/chart-of-account");
+  }
+
   return resData;
 };
 
@@ -1135,25 +1121,7 @@ export const updateChartOfAccountService = async (
   editId: number,
   data: FormData,
 ): Promise<ApiResponse> => {
-  const name = data.get("name") as string;
-  const code = data.get("code") as string;
-  let parentId = data.get("parentId");
-  const is_active =
-    data.get("is_active") === "true" || data.get("is_active") === "on";
-  const gl_type = data.get("gl_type") as string;
-  // ✅ Normalize parentId
-  if (!parentId || parentId === "undefined" || parentId === "") {
-    parentId = null;
-  } else {
-    parentId = parentId.toString();
-  }
-  const payload: any = {
-    name,
-    code,
-    parentId,
-    is_active,
-    gl_type,
-  };
+  const payload = Object.fromEntries(data.entries());
   const validationFields = ChartOfAccountFormSchema.safeParse(payload);
   if (!validationFields.success) {
     return {

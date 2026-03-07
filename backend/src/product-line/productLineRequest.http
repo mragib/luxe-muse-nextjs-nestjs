@@ -1,0 +1,63 @@
+@adminToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzI4MDY4NzIsImV4cCI6MTc3MzQxMTY3Mn0.LqNQQ9TPBc6sgkOtZaNrT4BlqOJB7iW7adRtaKrVQRE
+@customerToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmODFmYTg4MS01NzQ3LTQxZTMtYTMzYy1iMDVkZmMyNTM1MGMiLCJpYXQiOjE3NzIzMzkxNTUsImV4cCI6MTc3Mjk0Mzk1NX0.Yss97XiLaKPCcOG1lDsX_nLr5KfhTCSmXLRhYv187YM
+
+###Sign in as admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+
+###Sign in as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+@product_id_1 =697c903c-d87f-42cd-a682-cc8f411c6761
+
+@attribute_value_id_yellow = b2faea8f-50e0-431b-8fbb-43a3a74b36d3
+@attribute_value_id_red = 571f2d85-b11d-4c50-9950-227eb9e61664
+@attribute_value_id_M = f3e1de82-c838-42a0-b71a-28f21f616bf0
+
+### Create a product line ###
+POST http://localhost:8000/product-line
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    "productId": "{{product_id_1}}",
+    "sku": "SKU-001",
+    "sellUnitPrice": 1000,
+    "costUnitPrice": 800,
+    "wholesaleUnitPrice": 900,
+    "attributeValues":[
+        {
+            "id": "{{attribute_value_id_yellow}}"
+        },
+        {
+            "id": "{{attribute_value_id_red}}"
+        },
+        {
+            "id": "{{attribute_value_id_M}}"
+        }
+    ],
+    "is_active": true,
+    "productImages":[
+        {
+            "url": "https://example.com/product-line-image1.jpg",
+            "alt": "Product Line Image 1"
+        },
+        {
+            "url": "https://example.com/product-line-image2.jpg",
+            "alt": "Product Line Image 2"
+        }
+    ]
+    
+}

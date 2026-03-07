@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import ButtonIcon from "@/components/ui/ButtonIcon";
+import ConfirmDelete from "@/components/ui/ConfirmDelete";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,12 +8,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Modal from "@/components/ui/Modal";
-import React from "react";
+import { deleteAttributeValueService } from "@/lib/data-service";
+import { Attribute, AttributeValue } from "@/lib/type";
 import { HiEllipsisHorizontal, HiPencil, HiTrash } from "react-icons/hi2";
 import { CreateAttributeValueForm } from "./CreateAttributeValueForm";
-import ConfirmDelete from "@/components/ui/ConfirmDelete";
-import { Attribute, AttributeValue, Brand } from "@/lib/type";
-import { deleteAttributeService, deleteBrandService } from "@/lib/data-service";
 
 export default function AttributeValueRow({
   attributeValue,
@@ -58,7 +57,7 @@ export default function AttributeValueRow({
         <ConfirmDelete
           resource="attribute value"
           onConfirm={() => {
-            deleteAttributeService(attributeValue.id);
+            deleteAttributeValueService(attributeValue.id);
           }}
           disabled={false}
           onCloseModal={undefined}

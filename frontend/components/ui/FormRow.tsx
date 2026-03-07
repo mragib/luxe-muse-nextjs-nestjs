@@ -38,7 +38,7 @@ const FormRow: React.FC<FormRowProps> = ({
   const labelFor = getLabelFor();
 
   return (
-    <>
+    <div className="grid">
       <div className={classes}>
         {label && (
           <label className="font-medium" htmlFor={labelFor}>
@@ -56,7 +56,7 @@ const FormRow: React.FC<FormRowProps> = ({
           ))}
         </ul>
       )}
-    </>
+    </div>
   );
 };
 

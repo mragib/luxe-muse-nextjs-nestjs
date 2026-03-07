@@ -1,4 +1,4 @@
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZDljZGRjZC0yN2ZkLTRmZTUtOTlmNS0wYTkzZmU3YjczNGEiLCJpYXQiOjE3NzIyNTQzNzUsImV4cCI6MTc3Mjg1OTE3NX0.RYBAA_FiFIiLFDuNUJUFqoYdNyuUqtAAIXHuMsqcF30
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzI4MDA3OTYsImV4cCI6MTc3MzQwNTU5Nn0.glUWpptJSyScMFodfFZTe-bOGxD8aH7ZATFekA3zxXk
 
 ### Login as customer ###
 POST http://localhost:8000/auth/signin
@@ -27,9 +27,6 @@ Authorization: Bearer {{admin_token}}
 
 {
 "name":"Macbook",
-"sellingUnitPrice": 1999.99,
-"costUnitPrice": 1500.00,
-"wholesaleUnitPrice": 1800.00,
 "image_url":"https://example.com/macbook-pro.jpg"
 }
 

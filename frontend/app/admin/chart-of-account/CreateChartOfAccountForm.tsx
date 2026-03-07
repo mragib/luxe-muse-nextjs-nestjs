@@ -73,6 +73,7 @@ export default function CreateChartOfAccountForm({
   });
 
   const onSubmit = async (data: Record<string, any>) => {
+    console.log("Form Data:", data); // Debug log to check form data
     const formData = new FormData();
 
     for (const key in data) {
@@ -81,6 +82,10 @@ export default function CreateChartOfAccountForm({
       // ✅ Parent mapping (VERY IMPORTANT FIX)
       if (key === "parent") {
         formData.append("parentId", value?.value || "");
+        continue;
+      }
+      if (key === "gl_type") {
+        formData.append("gl_type", value?.value || "");
         continue;
       }
 
@@ -96,72 +101,73 @@ export default function CreateChartOfAccountForm({
 
   useEffect(() => {
     if (state?.status === APIStatus.SUCCESS) {
-      toast.success(state.message || "Category saved successfully");
+      toast.success(state.message || "Chart of Account saved successfully");
       onCloseModal?.();
     } else if (state?.error || state?.status === APIStatus.FAIL) {
-      toast.error(state?.message || "Failed to save category");
+      toast.error(state?.message || "Failed to save Chart of Account");
     }
   }, [state, onCloseModal]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Code" error={state?.error?.code}>
-        <Input type="number" id="code" {...register("code")} />
-      </FormRow>
-      <FormRow label="Ledger Name" error={state?.error?.name}>
-        <Input type="text" id="name" {...register("name")} />
-      </FormRow>
-      <FormRow label="Type" error={state?.error?.gl_type}>
-        <Controller
-          name="gl_type"
-          control={control}
-          rules={{ required: { value: true, message: "This is required" } }}
-          render={({ field: { ref, ...field } }) => {
-            return <Select {...field} options={AccountTypeForSelect} />;
-          }}
-        />
-      </FormRow>
-      <FormRow label="Parent" error={state?.error?.parentId}>
-        <Controller
-          name="parent"
-          control={control}
-          render={({ field: { ref, ...field } }) => (
-            <CreatableSelect
-              {...field}
-              data={filteredChartofAccount}
-              refs={ref}
-              multiple={false}
-            />
+      <div className="grid md:grid-cols-2">
+        <FormRow label="Code" error={state?.error?.code}>
+          <Input type="number" id="code" {...register("code")} />
+        </FormRow>
+        <FormRow label="Ledger Name" error={state?.error?.name}>
+          <Input type="text" id="name" {...register("name")} />
+        </FormRow>
+        <FormRow label="Type" error={state?.error?.gl_type}>
+          <Controller
+            name="gl_type"
+            control={control}
+            render={({ field: { ref, ...field } }) => {
+              return <Select {...field} options={AccountTypeForSelect} />;
+            }}
+          />
+        </FormRow>
+        <FormRow label="Parent" error={state?.error?.parentId}>
+          <Controller
+            name="parent"
+            control={control}
+            render={({ field: { ref, ...field } }) => (
+              <CreatableSelect
+                {...field}
+                data={filteredChartofAccount}
+                refs={ref}
+                multiple={false}
+              />
+            )}
+          />
+        </FormRow>
+
+        <FormRow label="Debit" error={state?.error?.dr_amount}>
+          <Input type="number" step=".01" id="id" {...register("dr_amount")} />
+        </FormRow>
+        <FormRow label="Credit" error={state?.error?.cr_amount}>
+          <Input
+            type="number"
+            step=".01"
+            id="cr_amount"
+            {...register("cr_amount")}
+          />
+        </FormRow>
+
+        <FormRow label="Leaf" htmlFor="is_leaf">
+          <Input type="checkbox" id="is_leaf" {...register("is_leaf")} />
+
+          {state?.error?.is_leaf && (
+            <p className="text-red-500 text-sm">{state.error.is_leaf}</p>
           )}
-        />
-      </FormRow>
+        </FormRow>
+        <FormRow label="Active" htmlFor="is_active">
+          <Input type="checkbox" id="is_active" {...register("is_active")} />
 
-      <FormRow label="Debit" error={state?.error?.dr_amount}>
-        <Input type="number" step=".01" id="id" {...register("dr_amount")} />
-      </FormRow>
-      <FormRow label="Credit" error={state?.error?.cr_amount}>
-        <Input
-          type="number"
-          step=".01"
-          id="cr_amount"
-          {...register("cr_amount")}
-        />
-      </FormRow>
-
-      <FormRow label="Leaf" htmlFor="is_leaf">
-        <Input type="checkbox" id="is_leaf" {...register("is_leaf")} />
-
-        {state?.error?.is_leaf && (
-          <p className="text-red-500 text-sm">{state.error.is_leaf}</p>
-        )}
-      </FormRow>
-      <FormRow label="Active" htmlFor="is_active">
-        <Input type="checkbox" id="is_active" {...register("is_active")} />
-
-        {state?.error?.is_active && (
-          <p className="text-red-500 text-sm">{state.error.is_active}</p>
-        )}
-      </FormRow>
+          {state?.error?.is_active && (
+            <p className="text-red-500 text-sm">{state.error.is_active}</p>
+          )}
+        </FormRow>
+      </div>
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Submitting..." : "Submit"}
       </Button>

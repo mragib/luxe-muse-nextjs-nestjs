@@ -1,11 +1,5 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
-import { Product } from '../../product/entities/product.entity';
+import { ProductLine } from 'src/product-line/entities/product-line.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class ProductImage {
@@ -21,10 +15,9 @@ export class ProductImage {
   @Column({ default: false })
   isPrimary: boolean;
 
-  @ManyToOne(() => Product)
-  @JoinColumn({ name: 'productId' })
-  product: Product;
+  @ManyToOne(() => ProductLine, (item) => item.productImages)
+  productLine: ProductLine;
 
   @Column()
-  productId: string;
+  productLineId: string;
 }

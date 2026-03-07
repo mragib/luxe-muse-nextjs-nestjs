@@ -21,6 +21,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
 import { ChartOfAccountModule } from './chart-of-account/chart-of-account.module';
+import { TransactionModule } from './transaction/transaction.module';
+import { JournalModule } from './journal/journal.module';
+import { ExpenseModule } from './expense/expense.module';
 
 @Module({
   imports: [
@@ -55,6 +58,12 @@ import { ChartOfAccountModule } from './chart-of-account/chart-of-account.module
     ProductImageModule,
 
     ChartOfAccountModule,
+
+    TransactionModule,
+
+    JournalModule,
+
+    ExpenseModule,
   ],
   controllers: [AppController],
   providers: [

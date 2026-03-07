@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
@@ -19,17 +13,17 @@ export class CreateProductDto {
   @IsOptional()
   slug?: string;
 
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
-  sellingUnitPrice: number;
+  // @IsNumber({ maxDecimalPlaces: 2 })
+  // @Min(0)
+  // sellingUnitPrice: number;
 
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
-  costUnitPrice: number;
+  // @IsNumber({ maxDecimalPlaces: 2 })
+  // @Min(0)
+  // costUnitPrice: number;
 
-  @IsNumber({ maxDecimalPlaces: 2 })
-  @Min(0)
-  wholesaleUnitPrice: number;
+  // @IsNumber({ maxDecimalPlaces: 2 })
+  // @Min(0)
+  // wholesaleUnitPrice: number;
 
   @IsString()
   @IsOptional()
@@ -40,6 +34,7 @@ export class CreateProductDto {
   unit: string;
 
   @IsOptional()
+  @IsBoolean()
   is_active?: boolean;
 
   @IsString()

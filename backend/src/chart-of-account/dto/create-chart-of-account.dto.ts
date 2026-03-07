@@ -4,7 +4,6 @@ import {
   IsEnum,
   IsNotEmpty,
   IsNumber,
-  IsNumberString,
   IsObject,
   IsOptional,
   IsString,
@@ -30,13 +29,14 @@ export class CreateChartOfAccountDto {
   @IsOptional()
   is_leaf: boolean;
 
-  @IsNumberString()
+  @IsNumber()
   dr_amount: number;
 
-  @IsNumberString()
+  @IsNumber()
   cr_amount: number;
 
-  @IsNumberString()
+  @IsNumber()
+  @IsOptional()
   balance?: number;
 
   @IsOptional()

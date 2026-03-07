@@ -40,13 +40,34 @@ export class ProductService {
   }
 
   async findAll() {
-    const [product, count] = await this.productRepository.findAndCount({
+    const [products, count] = await this.productRepository.findAndCount({
       relations: ['brand', 'category'],
     });
+
+    // const query = this.productRepository
+    //   .createQueryBuilder('product')
+    //   .leftJoin('product.brand', 'brand')
+    //   .leftJoin('product.category', 'category')
+    //   .select([
+    //     'product.id AS id',
+    //     'product.name AS name',
+    //     'product.slug AS slug',
+    //     'product.image_url AS image_url',
+    //     'product.description AS description',
+    //     'product.is_active AS is_active',
+    //     'product.unit AS unit',
+    //     'brand.name AS brand',
+    //     'category.name AS category',
+    //   ]);
+
+    // const [products, count] = await Promise.all([
+    //   query.getRawMany(),
+    //   this.productRepository.count(),
+    // ]);
     return {
       status: 'success',
       statuscode: 200,
-      data: product,
+      data: products,
       count: count,
     };
   }

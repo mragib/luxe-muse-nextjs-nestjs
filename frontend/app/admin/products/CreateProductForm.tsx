@@ -20,9 +20,6 @@ interface ProductFormData {
   description: string;
   image_url: FileList | string;
   unit: { label: string; value: string } | null;
-  sellingUnitPrice: number;
-  costUnitPrice: number;
-  wholesaleUnitPrice: number;
   is_active: boolean;
   category: { label: string; value: string } | null;
   brand: { label: string; value: string } | null;
@@ -42,7 +39,6 @@ export default function CreateProductForm({
   brands,
 }: CreateProductFormProps) {
   const [state, setState] = useState<ApiResponse>();
-  console.log("Product to Edit:", productToEdit);
   const {
     id: editId,
     brandId,
@@ -52,11 +48,6 @@ export default function CreateProductForm({
     ...editData
   } = productToEdit;
   const isEditSession = Boolean(editId);
-
-  if (isEditSession) {
-    console.log(editiableBrand);
-    console.log(editiableCategory);
-  }
 
   const {
     register,
@@ -192,36 +183,6 @@ export default function CreateProductForm({
                 placeholder="Select unit..."
               />
             )}
-          />
-        </FormRow>
-
-        <FormRow
-          label="Selling Unit Price"
-          error={state?.error?.sellingUnitPrice}
-        >
-          <Input
-            type="number"
-            id="sellingUnitPrice"
-            {...register("sellingUnitPrice")}
-          />
-        </FormRow>
-
-        <FormRow label="Cost Unit Price" error={state?.error?.costUnitPrice}>
-          <Input
-            type="number"
-            id="costUnitPrice"
-            {...register("costUnitPrice")}
-          />
-        </FormRow>
-
-        <FormRow
-          label="Wholesale Unit Price"
-          error={state?.error?.wholesaleUnitPrice}
-        >
-          <Input
-            type="number"
-            id="wholesaleUnitPrice"
-            {...register("wholesaleUnitPrice")}
           />
         </FormRow>
 

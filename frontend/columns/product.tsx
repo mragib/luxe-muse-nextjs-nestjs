@@ -90,54 +90,7 @@ export const getColumns = (
       );
     },
   },
-  {
-    id: "sellingUnitPrice",
-    accessorKey: "sellingUnitPrice",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="text-sm md:text-md font-bold uppercase"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    id: "wholesaleUnitPrice",
-    accessorKey: "wholesaleUnitPrice",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="text-sm md:text-md font-bold uppercase"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Wholesale Price
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    id: "costUnitPrice",
-    accessorKey: "costUnitPrice",
-    header: ({ column }) => {
-      return (
-        <Button
-          className="text-sm md:text-md font-bold uppercase"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Cost
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
+
   {
     id: "block",
     accessorKey: "is_active",

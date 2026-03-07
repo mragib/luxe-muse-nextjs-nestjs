@@ -158,9 +158,6 @@ export type Product = {
   name: string;
   description?: string;
   slug: string;
-  sellingUnitPrice: number;
-  costUnitPrice: number;
-  wholesaleUnitPrice: number;
   image_url?: string;
   is_active: boolean;
   unit: string;
@@ -173,15 +170,8 @@ export type Product = {
 export const ProductFormSchema = z.object({
   name: z.string().min(2, "Name should be at least 2 characters long").trim(),
   description: z.string().optional(),
-  sellingUnitPrice: z
-    .number()
-    .positive("Selling price must be a positive number"),
-  costUnitPrice: z.number().positive("Cost price must be a positive number"),
-  wholesaleUnitPrice: z
-    .number()
-    .positive("Wholesale price must be a positive number"),
   image_url: z.string().optional(),
-  is_active: z.boolean(),
+  is_active: z.boolean().optional(),
   unit: z.string().min(1, "Unit cannot be empty").trim(),
   categoryId: z.string(),
   brandId: z.string(),
@@ -201,12 +191,24 @@ export type ChartOfAccount = {
 };
 
 export const ChartOfAccountFormSchema = z.object({
-  code: z.number().positive("Code must be a positive number"),
+  code: z.coerce.number().positive("Code must be a positive number"),
+
   name: z.string().min(2, "Name should be at least 2 characters long").trim(),
+
   description: z.string().optional(),
-  parentId: z.string().nullable().optional(),
-  is_active: z.boolean(),
-  gl_type: z.enum(AccountType, "Please select a valid account type"),
-  dr_amount: z.number().nonnegative("Debit amount cannot be negative"),
-  cr_amount: z.number().nonnegative("Credit amount cannot be negative"),
+
+  parentId: z.preprocess(
+    (val) => (val === "" ? null : val),
+    z.coerce.number().nullable().optional(),
+  ),
+
+  is_active: z.coerce.boolean(),
+
+  gl_type: z.enum(AccountType, {
+    message: "Please select a valid account type",
+  }),
+
+  dr_amount: z.coerce.number().nonnegative("Debit amount cannot be negative"),
+
+  cr_amount: z.coerce.number().nonnegative("Credit amount cannot be negative"),
 });

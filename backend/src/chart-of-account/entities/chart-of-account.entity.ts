@@ -1,8 +1,10 @@
 import { AccountType } from 'src/common/common.enums';
+import { Journal } from 'src/journal/entities/journal.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
@@ -18,7 +20,7 @@ export class ChartOfAccount {
   @Column({ unique: true })
   code: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column({ type: 'text' })
@@ -47,4 +49,8 @@ export class ChartOfAccount {
 
   @CreateDateColumn()
   created_at: Date;
+
+  // Birdirectional relation with journal
+  @OneToMany(() => Journal, (item) => item.gl)
+  journal: Journal[];
 }

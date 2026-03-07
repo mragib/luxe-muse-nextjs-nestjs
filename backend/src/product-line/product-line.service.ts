@@ -4,11 +4,11 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateProductLineDto } from './dto/create-product-line.dto';
 import { UpdateProductLineDto } from './dto/update-product-line.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { ProductLine } from './entities/product-line.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductLineService {
@@ -23,6 +23,7 @@ export class ProductLineService {
         await this.productLineRepository.save(createProductLineDto);
       return productLine;
     } catch (error) {
+      console.log('error', error);
       if (error.errno === 19)
         throw new ConflictException('ProductLine is already exist.');
       throw new InternalServerErrorException('Something went wrong!🔥');

@@ -1,6 +1,13 @@
 import { Brand } from 'src/brand/entities/brand.entity';
 import { Category } from 'src/category/entities/category.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductLine } from 'src/product-line/entities/product-line.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Product {
@@ -15,15 +22,6 @@ export class Product {
 
   @Column({ unique: true })
   slug: string;
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  sellingUnitPrice: number;
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  costUnitPrice: number;
-
-  @Column('decimal', { precision: 10, scale: 2 })
-  wholesaleUnitPrice: number;
 
   @Column({ nullable: true })
   image_url: string;
@@ -45,13 +43,7 @@ export class Product {
   @Column()
   categoryId: string;
 
-  // @ManyToOne(() => ProductLine)
-  // @JoinColumn({ name: 'productLineId' })
-  // productLine: ProductLine;
-
-  // @Column()
-  // productLineId: string;
-
-  // @OneToMany(() => ProductImage, (image) => image.product)
-  // images: ProductImage[];
+  // Bidirectional relation with product line
+  @OneToMany(() => ProductLine, (item) => item.product)
+  productLine: ProductLine[];
 }

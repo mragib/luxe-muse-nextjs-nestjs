@@ -1,9 +1,11 @@
+import { ProductLine } from 'src/product-line/entities/product-line.entity';
 import {
   Column,
   Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
   JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Attribute } from '../../attribute/entities/attribute.entity';
 
@@ -27,4 +29,7 @@ export class AttributeValue {
 
   @Column()
   attributeId: string;
+
+  @ManyToMany(() => ProductLine, (item) => item.attributeValues)
+  productLine: ProductLine[];
 }

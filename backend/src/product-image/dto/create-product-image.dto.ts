@@ -1,10 +1,4 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  IsBoolean,
-} from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductImageDto {
   @IsString()
@@ -18,8 +12,4 @@ export class CreateProductImageDto {
   @IsBoolean()
   @IsOptional()
   isPrimary?: boolean;
-
-  @IsUUID()
-  @IsNotEmpty()
-  productId: string;
 }
