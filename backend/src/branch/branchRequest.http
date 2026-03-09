@@ -1,0 +1,51 @@
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzMwMzgyODEsImV4cCI6MTc3MzY0MzA4MX0.mUu_DSwhBJQ3BPP4I-lCgXFxGfXB-5-yDiwIRZFyx0w
+@customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDc0YTgwZC04ZWJmLTQ1NTktYmM0ZC04OTk2NWQ2YWI2NjUiLCJpYXQiOjE3NzMwMzgxOTUsImV4cCI6MTc3MzY0Mjk5NX0.lB1Obptfp9jhl4evIVWoybsDJiNODPs2vZ3i_m2zCKU
+### Login as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+
+### Login as Admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+### Create Branch ###
+POST http://localhost:8000/branch
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "name":"Main Branch",
+    "code":"MB001",
+    "address":"123 Main St",
+    "phone":"01714906170"
+}
+
+### Get All Branches ###
+GET http://localhost:8000/branch
+
+### Get Branch by ID ###
+GET http://localhost:8000/branch/1
+
+### Update Branch ###
+PATCH http://localhost:8000/branch/1
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "countryId": 1
+}
+
+### Delete Branch ###
+DELETE http://localhost:8000/branch/2
+Authorization: Bearer {{admin_token}}

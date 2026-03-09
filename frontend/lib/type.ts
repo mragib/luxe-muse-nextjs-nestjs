@@ -212,3 +212,61 @@ export const ChartOfAccountFormSchema = z.object({
 
   cr_amount: z.coerce.number().nonnegative("Credit amount cannot be negative"),
 });
+
+export type branch = {
+  id: string;
+  code: string;
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  city: string;
+  countryId: number;
+  managerId: string;
+  is_active: boolean;
+};
+
+export const BranchFormSchema = z.object({
+  name: z.coerce
+    .string()
+    .min(2, "Name should be at least 2 characters long")
+    .trim(),
+  code: z.coerce
+    .string()
+    .min(2, "Code should be at least 2 characters long")
+    .trim(),
+  address: z
+    .string()
+    .min(5, "Address should be at least 5 characters long")
+    .trim(),
+  phone: z
+    .string()
+    .trim()
+    .regex(
+      /(^(\+88|0088)?(01){1}[3456789]{1}(\d){8})$/,
+      "Provide proper phone number",
+    )
+    .nullable()
+    .optional(),
+  email: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .email("Provide a valid email address")
+    .nullable()
+    .optional(),
+
+  city: z
+    .string()
+    .min(2, "City should be at least 2 characters long")
+    .trim()
+    .nullable()
+    .optional(),
+  countryId: z.coerce
+    .number()
+    .positive("Country ID must be a positive number")
+    .nullable()
+    .optional(),
+  managerId: z.string().trim().nullable().optional(),
+  is_active: z.coerce.boolean(),
+});

@@ -105,7 +105,7 @@ export class ChartOfAccountService {
             name: data.name?.toLowerCase(),
             gl_type: data.gl_type,
             is_leaf: data.is_leaf === '1',
-
+            is_active: true,
             dr_amount: toNullableNumber(data.dr_amount) ?? 0,
             cr_amount: toNullableNumber(data.cr_amount) ?? 0,
 

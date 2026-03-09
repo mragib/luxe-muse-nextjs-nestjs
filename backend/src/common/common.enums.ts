@@ -65,3 +65,12 @@ export interface CsvChartOfAccountRow {
   parentId?: string;
   is_active: string;
 }
+
+export enum InventoryMovementType {
+  OPENING = 'opening',
+  PURCHASE = 'purchase',
+  SALE = 'sale',
+  RETURN = 'return',
+  ADJUSTMENT = 'adjustment',
+  DAMAGE = 'damage',
+}

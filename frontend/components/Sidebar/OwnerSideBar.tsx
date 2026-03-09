@@ -1,23 +1,22 @@
 "use client";
-import React from "react";
+import { ADMIN_MENU } from "@/lib/constants";
+import Image from "next/image";
+import Link from "next/link";
+import React, { RefObject } from "react";
+import { BsBoxes } from "react-icons/bs";
 import {
   FaBangladeshiTakaSign,
   FaHandHoldingDollar,
   FaUnlockKeyhole,
 } from "react-icons/fa6";
-import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
-import { TiShoppingCart } from "react-icons/ti";
-import SidebarLinkGroup from "./SidebarLinkGroup";
 import { GrStorage } from "react-icons/gr";
-import { BsBoxes } from "react-icons/bs";
-import { MdOutlineDashboard } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
+import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { LuFileStack } from "react-icons/lu";
-import Link from "next/link";
+import { MdOutlineDashboard } from "react-icons/md";
+import { TiShoppingCart } from "react-icons/ti";
 import SignOutButton from "../master/signOutButton";
-import Image from "next/image";
-import { RefObject } from "react";
-import { ADMIN_MENU } from "@/lib/constants";
+import SidebarLinkGroup from "./SidebarLinkGroup";
 
 interface OwnerSideBarProps {
   pathname: string;
@@ -400,9 +399,9 @@ function OwnerSideBar({
               {/* <!-- Menu Item Branches --> */}
               <li>
                 <Link
-                  href="/branches"
+                  href="/admin/branch"
                   className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-gray-700 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800 ${
-                    pathname.includes("branches") &&
+                    pathname.includes("branch") &&
                     "bg-gray-200 dark:bg-gray-800"
                   }`}
                 >

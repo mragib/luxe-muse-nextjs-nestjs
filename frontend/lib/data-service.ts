@@ -9,6 +9,7 @@ import {
   APIStatus,
   AttributeFormSchema,
   AttributeValueFormSchema,
+  BranchFormSchema,
   Brand,
   BrandFormSchema,
   Category,
@@ -1163,5 +1164,77 @@ export const InsertInitialChartOfAccount = async (
   );
   const resData = await response.json();
   if (response.ok) revalidatePath("/admin/chart-of-account");
+  return resData;
+};
+
+// branch services
+export const getBranches = async (): Promise<ApiResponse> => {
+  const response = await publicFetch(`${BACKEND_URL}/branch`);
+  const data = await response.json();
+  return data;
+};
+
+export const addBranchService = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  // ✅ Convert FormData → plain object
+  const payload = Object.fromEntries(data.entries());
+
+  // ✅ Validate + transform using Zod
+  const validation = BranchFormSchema.safeParse(payload);
+
+  if (!validation.success) {
+    return {
+      error: validation.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/branch`,
+    "POST",
+    JSON.stringify(validation.data),
+  );
+
+  const resData = await response.json();
+
+  if (response.ok) {
+    revalidatePath("/admin/branch");
+  }
+
+  return resData;
+};
+
+export const updateBranchService = async (
+  state: ApiResponse,
+  editId: string,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const payload = Object.fromEntries(data.entries());
+  const validationFields = BranchFormSchema.safeParse(payload);
+  if (!validationFields.success) {
+    return {
+      error: validationFields.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/branch/${editId}`,
+    "PATCH",
+    JSON.stringify(validationFields.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/branch");
+  return resData;
+};
+
+export const deleteBranchService = async (id: string): Promise<ApiResponse> => {
+  const response = await authDelete(`${BACKEND_URL}/branch/${id}`);
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/branch");
   return resData;
 };

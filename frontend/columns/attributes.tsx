@@ -1,14 +1,11 @@
 "use client";
 
 import AttributeRow from "@/app/admin/attribute/AttributeRow";
-import BrandRow from "@/app/admin/brands/BrandRow";
-import { UserRow } from "@/app/admin/users/UserRow";
 import { Button } from "@/components/ui/button";
-import { Attribute, Brand } from "@/lib/type";
+import { Attribute } from "@/lib/type";
 import { capitalize } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import Image from "next/image";
 
 export const columns: ColumnDef<Attribute>[] = [
   {
