@@ -1,8 +1,15 @@
 import { ChartOfAccount } from 'src/chart-of-account/entities/chart-of-account.entity';
 import { PaymentMethodType } from 'src/common/common.enums';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity()
+@Unique(['name', 'account_number'])
 export class FinancialAccount {
   @PrimaryGeneratedColumn()
   id: number;
@@ -10,7 +17,7 @@ export class FinancialAccount {
   @Column({ length: 80 })
   name: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true })
   code: number;
 
   @Column({ nullable: true, length: 80 })
@@ -26,7 +33,9 @@ export class FinancialAccount {
   balance: number;
 
   // Many-to-one relation with Chartofaccounting
-  @ManyToOne(() => ChartOfAccount, (chart) => chart.financialAccounts)
+  @ManyToOne(() => ChartOfAccount, (chart) => chart.financialAccounts, {
+    cascade: true,
+  })
   chartOfAccount: ChartOfAccount;
 
   // Bi derections realtion

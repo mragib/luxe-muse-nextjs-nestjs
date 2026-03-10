@@ -27,7 +27,7 @@ Authorization: Bearer {{admin_token}}
 
 {
     "name":"MAIN CASH",
-    "code":1301,
-    "type": "in-hand",
-    "balance": 1000.00
+    "code":1310,
+    "type": "cash",
+    "balance": 1000.23
 }

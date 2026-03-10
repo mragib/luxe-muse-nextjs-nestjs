@@ -29,7 +29,7 @@ export class CreateFinancialAccountDto {
 
   @IsEnum(PaymentMethodType)
   @MaxLength(50)
-  type: string;
+  type: PaymentMethodType;
 
   @IsNotEmpty()
   @IsNumber()

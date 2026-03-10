@@ -9,3 +9,9 @@ update country set currency='BDT',flag='https://www.geonames.org/flags/x/bd.gif'
 
 -- "flag": "https://www.geonames.org/flags/x/bd.gif",
 --     "symbol": "\u09F3",
+
+
+delete from financial_account;
+delete from transactions;
+
+select * from transactions;
