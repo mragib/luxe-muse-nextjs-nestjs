@@ -19,10 +19,10 @@ export class Journal {
   @ManyToOne(() => ChartOfAccount, (item) => item.journal)
   gl: ChartOfAccount;
 
-  @Column('decimal', { default: 0 })
+  @Column('decimal', { precision: 14, scale: 2, default: 0 })
   dr_amount: number;
 
-  @Column('decimal', { default: 0 })
+  @Column('decimal', { precision: 14, scale: 2, default: 0 })
   cr_amount: number;
 
   @CreateDateColumn()

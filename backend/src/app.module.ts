@@ -28,6 +28,7 @@ import { InventoryMovementModule } from './inventory-movement/inventory-movement
 import { InventoryModule } from './inventory/inventory.module';
 import { JournalModule } from './journal/journal.module';
 import { TransactionModule } from './transaction/transaction.module';
+import { FinancialAccountsModule } from './financial_accounts/financial_accounts.module';
 
 @Module({
   imports: [
@@ -75,6 +76,8 @@ import { TransactionModule } from './transaction/transaction.module';
     InventoryModule,
 
     InventoryBatchModule,
+
+    FinancialAccountsModule,
   ],
   controllers: [AppController],
   providers: [

@@ -20,7 +20,7 @@ export class Transaction {
   @Column()
   description: string;
 
-  @Column('double')
+  @Column('decimal', { precision: 14, scale: 2 })
   total_amount: number;
 
   @Column({ type: 'text' })

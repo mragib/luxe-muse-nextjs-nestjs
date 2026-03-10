@@ -1,0 +1,33 @@
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzMwMzgyODEsImV4cCI6MTc3MzY0MzA4MX0.mUu_DSwhBJQ3BPP4I-lCgXFxGfXB-5-yDiwIRZFyx0w
+@customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDc0YTgwZC04ZWJmLTQ1NTktYmM0ZC04OTk2NWQ2YWI2NjUiLCJpYXQiOjE3NzMwMzgxOTUsImV4cCI6MTc3MzY0Mjk5NX0.lB1Obptfp9jhl4evIVWoybsDJiNODPs2vZ3i_m2zCKU
+### Login as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+
+### Login as Admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+
+### Create Financial Account ###
+POST http://localhost:8000/financial-accounts
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "name":"MAIN CASH",
+    "code":1301,
+    "type": "in-hand",
+    "balance": 1000.00
+}

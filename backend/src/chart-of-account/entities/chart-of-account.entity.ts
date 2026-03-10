@@ -1,4 +1,5 @@
 import { AccountType } from 'src/common/common.enums';
+import { FinancialAccount } from 'src/financial_accounts/entities/financial_account.entity';
 import { Journal } from 'src/journal/entities/journal.entity';
 import {
   Column,
@@ -53,4 +54,7 @@ export class ChartOfAccount {
   // Birdirectional relation with journal
   @OneToMany(() => Journal, (item) => item.gl)
   journal: Journal[];
+
+  @OneToMany(() => FinancialAccount, (item) => item.chartOfAccount)
+  financialAccounts: FinancialAccount[];
 }
