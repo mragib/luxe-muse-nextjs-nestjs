@@ -1,13 +1,17 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ChartOfAccountService } from 'src/chart-of-account/chart-of-account.service';
+import { ChartOfAccount } from 'src/chart-of-account/entities/chart-of-account.entity';
 import {
   AccountType,
   CASH_IN_BANK_CODE,
   CASH_IN_HAND_CODE,
+  PaymentMethodType,
   TransactionType,
 } from 'src/common/common.enums';
+import { CreateFinancialAccountTransactionDto } from 'src/transaction/dto/create-financial-account-transaction.dto';
 import { TransactionService } from 'src/transaction/transaction.service';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, DeepPartial, Repository } from 'typeorm';
 import { CreateFinancialAccountDto } from './dto/create-financial_account.dto';
 import { UpdateFinancialAccountDto } from './dto/update-financial_account.dto';
 import { FinancialAccount } from './entities/financial_account.entity';
@@ -18,44 +22,52 @@ export class FinancialAccountsService {
     @InjectRepository(FinancialAccount)
     private readonly financeAccountRepo: Repository<FinancialAccount>,
     private readonly transactionService: TransactionService,
+    private readonly chartOfAccountService: ChartOfAccountService,
     private readonly dataSource: DataSource,
   ) {}
   async create(createFinancialAccountDto: CreateFinancialAccountDto) {
     const { name, type, balance, code } = createFinancialAccountDto;
     try {
       return this.dataSource.transaction(async (manager) => {
+        const parent = await this.chartOfAccountService.findOneByCode(
+          type === PaymentMethodType.Cash
+            ? CASH_IN_HAND_CODE
+            : CASH_IN_BANK_CODE,
+        );
+
+        const chart = manager.create(ChartOfAccount, {
+          code,
+          name: name.toLowerCase(),
+          gl_type: AccountType.Asset,
+          is_leaf: true,
+          parent,
+        } as DeepPartial<ChartOfAccount>);
+        const savedChart = await manager.save(chart);
         const financialAccount = manager.create(FinancialAccount, {
           ...createFinancialAccountDto,
-          chartOfAccount: {
-            code: code,
-            name: name,
-            gl_type: AccountType.Asset,
-            is_leaf: true,
-            parentId: code === 1310 ? CASH_IN_HAND_CODE : CASH_IN_BANK_CODE,
-            dr_amount: balance,
-            cr_amount: 0,
-          },
+          chartOfAccount: savedChart,
         });
 
-        console.log('Financial Account to be created:', financialAccount);
+        const savedFinancialAccount = await manager.save(financialAccount);
 
-        const transaction =
-          this.transactionService.createFinancialAccountTransaction(
+        if (balance && balance > 0) {
+          await this.transactionService.createFinancialAccountTransaction(
             {
-              amount: balance,
-              type: TransactionType.OPENING_BALANCE,
+              total_amount: balance,
+              transaction_type: TransactionType.OPENING_BALANCE,
               description: `Initial balance for ${name} account`,
-              financialAccount: financialAccount,
-            },
+              financialAccount: savedFinancialAccount,
+            } as CreateFinancialAccountTransactionDto,
             manager,
           );
-
-        const savedFinancialAccount = await manager.save(financialAccount);
+        }
 
         return savedFinancialAccount;
       });
     } catch (error) {
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(
+        error.message || 'Something went wrong!🔥',
+      );
     }
   }
 

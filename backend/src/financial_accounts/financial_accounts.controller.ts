@@ -7,6 +7,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { GetUser } from 'src/auth/decorators/get-user.decorator';
+import { User } from 'src/user/entities/user.entity';
 import { CreateFinancialAccountDto } from './dto/create-financial_account.dto';
 import { UpdateFinancialAccountDto } from './dto/update-financial_account.dto';
 import { FinancialAccountsService } from './financial_accounts.service';
@@ -18,7 +20,11 @@ export class FinancialAccountsController {
   ) {}
 
   @Post()
-  create(@Body() createFinancialAccountDto: CreateFinancialAccountDto) {
+  create(
+    @Body() createFinancialAccountDto: CreateFinancialAccountDto,
+    @GetUser() user: User,
+  ) {
+    createFinancialAccountDto.created_by = user;
     return this.financialAccountsService.create(createFinancialAccountDto);
   }
 

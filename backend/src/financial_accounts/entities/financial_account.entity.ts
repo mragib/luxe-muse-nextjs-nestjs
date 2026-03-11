@@ -1,11 +1,14 @@
 import { ChartOfAccount } from 'src/chart-of-account/entities/chart-of-account.entity';
 import { PaymentMethodType } from 'src/common/common.enums';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -45,15 +48,15 @@ export class FinancialAccount {
   //   @OneToMany(() => SaleRevenue, (item) => item.account)
   //   saleRevenue: SaleRevenue[];
 
-  //   @ManyToOne(() => User, { eager: true })
-  //   created_by: User;
+  @ManyToOne(() => User)
+  created_by: User;
 
-  //   @CreateDateColumn()
-  //   created_at: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  //   @ManyToOne(() => User, { eager: true })
-  //   updated_by: User;
+  @ManyToOne(() => User)
+  updated_by: User;
 
-  //   @UpdateDateColumn()
-  //   updated_at: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 }

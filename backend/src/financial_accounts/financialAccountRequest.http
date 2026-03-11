@@ -31,3 +31,16 @@ Authorization: Bearer {{admin_token}}
     "type": "cash",
     "balance": 1000.23
 }
+
+### Create Financial Account (Bank) ###
+POST http://localhost:8000/financial-accounts
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+    "name":"UCB",
+    "code":1321,
+    "type": "bank",
+    "balance": 5000.87,
+    "account_number": "1234567890"
+}

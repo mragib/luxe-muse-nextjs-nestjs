@@ -1,10 +1,12 @@
 import { TransactionType } from 'src/common/common.enums';
 import { Expense } from 'src/expense/entities/expense.entity';
 import { Journal } from 'src/journal/entities/journal.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -28,6 +30,9 @@ export class Transaction {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @ManyToOne(() => User)
+  created_by: User;
 
   // for Bi directional
   @OneToMany(() => Journal, (item) => item.transaction, {

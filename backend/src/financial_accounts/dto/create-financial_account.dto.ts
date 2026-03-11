@@ -8,6 +8,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { PaymentMethodType } from 'src/common/common.enums';
+import { User } from 'src/user/entities/user.entity';
 
 export class CreateFinancialAccountDto {
   @IsString()
@@ -34,4 +35,7 @@ export class CreateFinancialAccountDto {
   @IsNotEmpty()
   @IsNumber()
   balance: number;
+
+  @IsOptional()
+  created_by: User;
 }

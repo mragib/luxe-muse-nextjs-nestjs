@@ -13,5 +13,8 @@ update country set currency='BDT',flag='https://www.geonames.org/flags/x/bd.gif'
 
 delete from financial_account;
 delete from transactions;
+delete from journal;
+
+delete from chart_of_account where code=1310;
 
 select * from transactions;

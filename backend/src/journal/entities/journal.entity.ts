@@ -1,5 +1,6 @@
 import { ChartOfAccount } from 'src/chart-of-account/entities/chart-of-account.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -27,4 +28,7 @@ export class Journal {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @ManyToOne(() => User)
+  created_by: User;
 }

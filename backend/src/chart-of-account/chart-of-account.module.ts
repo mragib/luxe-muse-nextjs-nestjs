@@ -8,5 +8,6 @@ import { ChartOfAccount } from './entities/chart-of-account.entity';
   imports: [TypeOrmModule.forFeature([ChartOfAccount])],
   controllers: [ChartOfAccountController],
   providers: [ChartOfAccountService],
+  exports: [ChartOfAccountService],
 })
 export class ChartOfAccountModule {}

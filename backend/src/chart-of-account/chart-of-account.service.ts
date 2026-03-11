@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import csv from 'csv-parser';
 import * as fs from 'fs';
 import { CsvChartOfAccountRow } from 'src/common/common.enums';
-import { TreeRepository } from 'typeorm';
+import { EntityManager, TreeRepository } from 'typeorm';
 import { CreateChartOfAccountDto } from './dto/create-chart-of-account.dto';
 import { UpdateChartOfAccountDto } from './dto/update-chart-of-account.dto';
 import { ChartOfAccount } from './entities/chart-of-account.entity';
@@ -56,6 +56,12 @@ export class ChartOfAccountService {
     return this.chartOfAccountRepository.findDescendants(chartOfAccount);
   }
 
+  async findOneByCode(code: number): Promise<ChartOfAccount | null> {
+    return await this.chartOfAccountRepository.findOne({
+      where: { code },
+    });
+  }
+
   findOne(id: number) {
     return this.chartOfAccountRepository.findOne({
       where: { id },
@@ -74,6 +80,26 @@ export class ChartOfAccountService {
       statuscode: 200,
       data: updatedProduct,
       message: 'Chart of account has been updated',
+    };
+  }
+
+  async updateBalance(
+    chartOfAccount: ChartOfAccount,
+    updateChartOfAccountDto: UpdateChartOfAccountDto,
+    manager: EntityManager,
+  ) {
+    const updatedProduct = await manager.save(ChartOfAccount, {
+      ...chartOfAccount,
+      dr_amount:
+        chartOfAccount.dr_amount + (updateChartOfAccountDto.dr_amount || 0),
+      cr_amount:
+        chartOfAccount.cr_amount + (updateChartOfAccountDto.cr_amount || 0),
+    });
+    return {
+      status: 'success',
+      statuscode: 200,
+      data: updatedProduct,
+      message: 'Chart of account balance has been updated',
     };
   }
 
