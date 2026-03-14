@@ -422,8 +422,8 @@ function OwnerSideBar({
               {/* <!-- Menu Item Auth Pages --> */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === "/transactions" ||
-                  pathname.includes("transactions")
+                  pathname === "/admin/transactions" ||
+                  pathname.includes("/admin/transactions")
                 }
               >
                 {(handleClick, open) => {
@@ -432,7 +432,7 @@ function OwnerSideBar({
                       <Link
                         href="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-gray-700 transition-all duration-300 ease-in-out hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-800 ${
-                          (pathname === "/transactions" ||
+                          (pathname === "/admin/transactions" ||
                             pathname.includes("transactions")) &&
                           "bg-gray-200 dark:bg-gray-800"
                         }`}
@@ -472,10 +472,10 @@ function OwnerSideBar({
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
-                              href="/transactions"
+                              href="/admin/transaction"
                               className={
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
-                                (pathname === "/transactions"
+                                (pathname === "/admin/transactions"
                                   ? "!text-gray-900 dark:!text-white"
                                   : "")
                               }

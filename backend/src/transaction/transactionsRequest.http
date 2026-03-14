@@ -1,0 +1,26 @@
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzMzMTQyNzEsImV4cCI6MTc3MzkxOTA3MX0.UXWSImIp-B_Phh6e2Fn2htFxaiPW1Zi_b3Iyrn7rm6I
+@customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiOGEzMjlhNi02ODE3LTQ0NWUtYTBmZi05NTJkOGVkZmY1YzAiLCJpYXQiOjE3NTk2Nzg1MjMsImV4cCI6MTc2MDI4MzMyM30.HTrbpWoFNl0I5Z6e2ZqcqI6QmkBH3qfMGXEcKDrnlNs
+
+### Login as customer ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"test@gmail.com",
+ "password":"test123"
+}
+
+
+### Login as Admin ###
+POST http://localhost:8000/auth/signin
+Content-Type: application/json
+
+{
+ "email":"admin@gmail.com",
+ "password":"test123"
+}
+
+
+### View all transactions ###
+GET http://localhost:8000/transaction
+Authorization: Bearer {{admin_token}}

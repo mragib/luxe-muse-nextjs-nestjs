@@ -270,3 +270,10 @@ export const BranchFormSchema = z.object({
   managerId: z.string().trim().nullable().optional(),
   is_active: z.coerce.boolean(),
 });
+
+export type Transaction = {
+  description: string;
+  transaction_date: Date;
+  total_amount: number;
+  transaction_type: string;
+};

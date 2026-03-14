@@ -35,10 +35,7 @@ export class Transaction {
   created_by: User;
 
   // for Bi directional
-  @OneToMany(() => Journal, (item) => item.transaction, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => Journal, (item) => item.transaction)
   journal: Journal[];
 
   @OneToOne(() => Expense, (item) => item.transaction)

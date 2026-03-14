@@ -1238,3 +1238,9 @@ export const deleteBranchService = async (id: string): Promise<ApiResponse> => {
   if (response.ok) revalidatePath("/admin/branch");
   return resData;
 };
+
+export const getTransactions = async (): Promise<ApiResponse> => {
+  const response = await authFetch(`${BACKEND_URL}/transaction`);
+  const data = await response.json();
+  return data;
+};

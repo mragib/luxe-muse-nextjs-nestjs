@@ -1,14 +1,17 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ChartOfAccountService } from 'src/chart-of-account/chart-of-account.service';
 import { OPENING_BALANCE_EQUITY_CODE } from 'src/common/common.enums';
 import { JournalService } from 'src/journal/journal.service';
-import { EntityManager } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateFinancialAccountTransactionDto } from './dto/create-financial-account-transaction.dto';
 import { Transaction } from './entities/transaction.entity';
 
 @Injectable()
 export class TransactionService {
   constructor(
+    @InjectRepository(Transaction)
+    private readonly transactionRepository: Repository<Transaction>,
     private readonly journalService: JournalService,
     private readonly chartOfAccountService: ChartOfAccountService,
   ) {}
@@ -51,5 +54,16 @@ export class TransactionService {
       manager,
     );
     return savedTransaction;
+  }
+
+  async findAll() {
+    const [transactions, count] = await this.transactionRepository.findAndCount(
+      {
+        order: {
+          created_at: 'DESC',
+        },
+      },
+    );
+    return { data: transactions, count, status: 'success', statuscode: 200 };
   }
 }
