@@ -6,18 +6,10 @@ import Form from "@/components/ui/Form";
 import FormRow from "@/components/ui/FormRow";
 import { Input } from "@/components/ui/input";
 import {
-  addAttributeService,
   addAttributeValueService,
-  updateAttributeService,
   updateAttributeValueService,
 } from "@/lib/data-service";
-import {
-  ApiResponse,
-  APIStatus,
-  Attribute,
-  AttributeValue,
-  Brand,
-} from "@/lib/type";
+import { ApiResponse, APIStatus, Attribute, AttributeValue } from "@/lib/type";
 import { changeForSelectObject } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -68,7 +60,6 @@ export const CreateAttributeValueForm = ({
 
   const onSubmit = async (data: Record<string, any>) => {
     const formData = new FormData();
-    console.log("Form data before processing:", data);
     for (const key in data) {
       const value = data[key];
       if (key === "attribute") {

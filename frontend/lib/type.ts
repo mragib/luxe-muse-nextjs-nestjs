@@ -1,5 +1,5 @@
 import z from "zod";
-import { AccountType } from "./constants";
+import { AccountType, PaymentMethodType } from "./constants";
 
 export type FormState =
   | {
@@ -277,3 +277,27 @@ export type Transaction = {
   total_amount: number;
   transaction_type: string;
 };
+
+export type FinancialAccount = {
+  id: number;
+  name: string;
+  code: number;
+  account_number?: string;
+  is_active: boolean;
+  type: PaymentMethodType;
+  balance: number;
+  chartOfAccount?: ChartOfAccount;
+  chartOfAccountId?: string;
+};
+
+export const FinancialAccountFormSchema = z.object({
+  name: z.string().min(2, "Name should be at least 2 characters long").trim(),
+  code: z.coerce.number().positive("Code must be a positive number"),
+  account_number: z.string().optional(),
+  is_active: z.coerce.boolean(),
+  type: z.enum(PaymentMethodType, {
+    message: "Please select a valid payment method type",
+  }),
+  balance: z.coerce.number().nonnegative("Balance cannot be negative"),
+  chartOfAccountId: z.string().optional(),
+});

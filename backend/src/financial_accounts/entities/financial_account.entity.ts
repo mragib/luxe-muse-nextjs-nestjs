@@ -36,9 +36,7 @@ export class FinancialAccount {
   balance: number;
 
   // Many-to-one relation with Chartofaccounting
-  @ManyToOne(() => ChartOfAccount, (chart) => chart.financialAccounts, {
-    cascade: true,
-  })
+  @ManyToOne(() => ChartOfAccount, (chart) => chart.financialAccounts)
   chartOfAccount: ChartOfAccount;
 
   // Bi derections realtion

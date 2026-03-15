@@ -580,10 +580,10 @@ function OwnerSideBar({
                           </li>
                           <li>
                             <Link
-                              href="/admin/bank-accounts"
+                              href="/admin/bank-account"
                               className={
                                 "group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-gray-500 transition-all duration-300 ease-in-out hover:text-gray-900 dark:text-gray-400 dark:hover:text-white " +
-                                (pathname === "/admin/bank-accounts"
+                                (pathname === "/admin/bank-account"
                                   ? "!text-gray-900 dark:!text-white"
                                   : "")
                               }

@@ -74,7 +74,7 @@ export function changeForDatabaseObject(data: any) {
 // Additional safe utility functions
 export function safeChangeForSelectArray(
   data: any[] | null | undefined,
-  fallback: any[] = []
+  fallback: any[] = [],
 ) {
   try {
     return changeForSelectArray(data) || fallback;
@@ -92,3 +92,13 @@ export function safeChangeForSelectObject(data: any, fallback: any = null) {
     return fallback;
   }
 }
+
+export const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "BDT",
+
+    currencyDisplay: "symbol",
+  })
+    .format(value)
+    .replace("BDT", "\u09F3");

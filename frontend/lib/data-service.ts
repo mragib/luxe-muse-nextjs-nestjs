@@ -15,6 +15,7 @@ import {
   Category,
   CategoryFormSchema,
   ChartOfAccountFormSchema,
+  FinancialAccountFormSchema,
   Product,
   ProductFormSchema,
   UserFormSchema,
@@ -1243,4 +1244,36 @@ export const getTransactions = async (): Promise<ApiResponse> => {
   const response = await authFetch(`${BACKEND_URL}/transaction`);
   const data = await response.json();
   return data;
+};
+
+// Finiancial Accounts
+export const getFinancialAccounts = async (): Promise<ApiResponse> => {
+  const response = await authFetch(`${BACKEND_URL}/financial-accounts`);
+  const data = await response.json();
+  return data;
+};
+
+export const addFinancialAccountService = async (
+  state: ApiResponse,
+  data: FormData,
+): Promise<ApiResponse> => {
+  const payload = Object.fromEntries(data.entries());
+
+  const validation = FinancialAccountFormSchema.safeParse(payload);
+  if (!validation.success) {
+    return {
+      error: validation.error.flatten().fieldErrors,
+      status: APIStatus.FAIL,
+      statusCode: 400,
+      message: "",
+    };
+  }
+  const response = await authPostOrPatch(
+    `${BACKEND_URL}/financial-accounts`,
+    "POST",
+    JSON.stringify(validation.data),
+  );
+  const resData = await response.json();
+  if (response.ok) revalidatePath("/admin/bank-account");
+  return resData;
 };

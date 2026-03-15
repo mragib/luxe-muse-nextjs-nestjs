@@ -1,22 +1,21 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Transaction } from "@/lib/type";
+import { FinancialAccount } from "@/lib/type";
 import { capitalize, formatCurrency } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/table-core";
-import { formatDate } from "date-fns";
+import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-export const transactionColumns: ColumnDef<Transaction>[] = [
+export const bankAccountColumns: ColumnDef<FinancialAccount>[] = [
   {
     header: "#",
     accessorKey: "index",
     cell: ({ row }) => row.index + 1,
   },
   {
-    id: "description",
-    accessorKey: "description",
-    cell: ({ row }) => capitalize(row.original.description || ""),
+    id: "name",
+    accessorKey: "name",
+    cell: ({ row }) => capitalize(row.original.name || ""),
     header: ({ column }) => {
       return (
         <Button
@@ -24,16 +23,16 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Description
+          Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    id: "total_amount",
-    accessorKey: "total_amount",
-    cell: ({ row }) => formatCurrency(row.original.total_amount),
+    id: "code",
+    accessorKey: "code",
+    cell: ({ row }) => row.original.code,
     header: ({ column }) => {
       return (
         <Button
@@ -41,15 +40,16 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Total Amount
+          Code
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    id: "transaction_type",
-    accessorKey: "transaction_type",
+    id: "account_number",
+    accessorKey: "account_number",
+    cell: ({ row }) => row.original.account_number || "N/A",
     header: ({ column }) => {
       return (
         <Button
@@ -57,17 +57,16 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Transaction Type
+          Account Number
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    id: "transaction_date",
-    accessorKey: "transaction_date",
-    cell: ({ row }) =>
-      formatDate(row.original.transaction_date, "dd MMM yyyy hh:mm a"),
+    id: "balance",
+    accessorKey: "balance",
+    cell: ({ row }) => formatCurrency(row.original.balance),
     header: ({ column }) => {
       return (
         <Button
@@ -75,7 +74,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Transaction Date
+          Balance
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );

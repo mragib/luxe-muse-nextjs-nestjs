@@ -77,3 +77,18 @@ export const AccountTypeForSelect = [
     label: "Expense",
   },
 ];
+
+export enum PaymentMethodType {
+  Bank = "bank",
+  Cash = "cash",
+  DigitalWallet = "digital-wallet",
+}
+
+export const PaymentMethodTypeForSelect = [
+  { value: "bank", label: "Bank" },
+  { value: "cash", label: "Cash" },
+  {
+    value: "digital-wallet",
+    label: "Digital Wallet",
+  },
+];

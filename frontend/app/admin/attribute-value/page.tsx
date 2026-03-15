@@ -2,7 +2,9 @@ import { AdminPageHeader } from "@/components/Header/AdminPageHeader";
 import { getAttributes, getAttributeValues } from "@/lib/data-service";
 import { AddAttributeValue } from "./AddAttributeValue";
 import AttributeValueTable from "./AttributeValueTable";
-
+export const metadata = {
+  title: "Attribute values",
+};
 const AttributeValuePage = async () => {
   const { data: attributeValues } = await getAttributeValues();
   const { data: attributes } = await getAttributes();

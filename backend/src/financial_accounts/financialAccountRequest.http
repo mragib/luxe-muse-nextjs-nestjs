@@ -44,3 +44,8 @@ Authorization: Bearer {{admin_token}}
     "balance": 5000.87,
     "account_number": "1234567890"
 }
+
+
+### Get All Financial Accounts ###
+GET http://localhost:8000/financial-accounts
+Authorization: Bearer {{admin_token}}
