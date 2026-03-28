@@ -4,7 +4,10 @@ import { ChartOfAccountService } from 'src/chart-of-account/chart-of-account.ser
 import { OPENING_BALANCE_EQUITY_CODE } from 'src/common/common.enums';
 import { JournalService } from 'src/journal/journal.service';
 import { EntityManager, Repository } from 'typeorm';
-import { CreateFinancialAccountTransactionDto } from './dto/create-financial-account-transaction.dto';
+import {
+  CreateFinancialAccountTransactionDto,
+  CreateTransferMoneyTransactionDto,
+} from './dto/create-financial-account-transaction.dto';
 import { Transaction } from './entities/transaction.entity';
 
 @Injectable()
@@ -49,6 +52,40 @@ export class TransactionService {
           transaction: savedTransaction,
           gl: cr_gl,
           created_by: transactionData.financialAccount.created_by,
+        },
+      ],
+      manager,
+    );
+    return savedTransaction;
+  }
+
+  async createTransferMoneyTransaction(
+    transactionData: CreateTransferMoneyTransactionDto,
+    manager: EntityManager,
+  ) {
+    const transaction = manager.create(Transaction, {
+      transaction_date: new Date(),
+      description: transactionData.description,
+      created_by: transactionData.created_by,
+      total_amount: transactionData.total_amount,
+      transaction_type: transactionData.transaction_type,
+    } as Partial<Transaction>);
+
+    const savedTransaction = await manager.save(transaction);
+
+    await this.journalService.createJournalEntryForFinncialAccount(
+      [
+        {
+          transaction: savedTransaction,
+          dr_amount: savedTransaction.total_amount,
+          gl: transactionData.debit_account.chartOfAccount,
+          created_by: transactionData.created_by,
+        },
+        {
+          cr_amount: savedTransaction.total_amount,
+          transaction: savedTransaction,
+          gl: transactionData.credit_account.chartOfAccount,
+          created_by: transactionData.created_by,
         },
       ],
       manager,

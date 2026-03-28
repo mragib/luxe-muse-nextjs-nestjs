@@ -1,4 +1,4 @@
-@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxODIyZWQ4NC0wNWVkLTQwMmYtYmJhZS1jMTMyMzg2Yjc2M2QiLCJpYXQiOjE3NzMwMzgyODEsImV4cCI6MTc3MzY0MzA4MX0.mUu_DSwhBJQ3BPP4I-lCgXFxGfXB-5-yDiwIRZFyx0w
+@admin_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZWViYzJhNS03ZDhmLTQ2MTEtYTQ3My02N2JiYzQxYmZkNzYiLCJpYXQiOjE3NzM3MzMwMzIsImV4cCI6MTc3NDMzNzgzMn0.eKsSAfQcbMy4LLIgskdZ8gni-91FCIN8nC4ZA7rxSbM
 @customer_token= eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNDc0YTgwZC04ZWJmLTQ1NTktYmM0ZC04OTk2NWQ2YWI2NjUiLCJpYXQiOjE3NzMwMzgxOTUsImV4cCI6MTc3MzY0Mjk5NX0.lB1Obptfp9jhl4evIVWoybsDJiNODPs2vZ3i_m2zCKU
 ### Login as customer ###
 POST http://localhost:8000/auth/signin
@@ -49,3 +49,20 @@ Authorization: Bearer {{admin_token}}
 ### Get All Financial Accounts ###
 GET http://localhost:8000/financial-accounts
 Authorization: Bearer {{admin_token}}
+
+### Transfer Money Between Accounts ###
+POST http://localhost:8000/financial-accounts/transfer
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "fromAccount": {
+    "id": 1
+  },
+  "toAccount": {
+    "id": 3
+  },
+  "balance": 1500,
+  "transfer_date": "2024-06-01T10:00:00Z",
+  "transaction_type": "TRANSFER"
+}

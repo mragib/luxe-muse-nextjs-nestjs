@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsDate,
   IsEmpty,
@@ -22,8 +23,10 @@ export class CreateTransferMoneyDto {
   @IsNumber()
   balance: number;
 
+  @IsOptional()
+  @Type(() => Date)
   @IsDate()
-  transfer_date: string;
+  transfer_date: Date;
 
   @IsOptional()
   @IsEnum(TransactionType)

@@ -92,3 +92,32 @@ export const PaymentMethodTypeForSelect = [
     label: "Digital Wallet",
   },
 ];
+
+export enum TransactionType {
+  TRANSFER = "TRANSFER",
+  WITHDRAW = "WITHDRAW",
+  DEPOSIT = "DEPOSIT",
+  PURCHASE = "PURCHASE",
+  SALE = "SALE",
+  PAYMENT = "PAYMENT",
+  RECEIPT = "RECEIPT",
+  ADJUSTMENT = "ADJUSTMENT",
+  OPENING_BALANCE = "OPENING_BALANCE",
+  CLOSING_BALANCE = "CLOSING_BALANCE",
+  REFUND = "REFUND",
+  EXPENSE = "EXPENSE",
+  INCOME = "INCOME",
+  REVERSAL = "REVERSAL",
+}
+
+export enum FinancialTransactionType {
+  TRANSFER = "TRANSFER",
+  WITHDRAW = "WITHDRAW",
+  DEPOSIT = "DEPOSIT",
+}
+
+export const FinancialTransactionTypeForSelect = [
+  { value: "TRANSFER", label: "Transfer" },
+  { value: "WITHDRAW", label: "Withdraw" },
+  { value: "DEPOSIT", label: "Deposit" },
+];

@@ -37,3 +37,30 @@ export class CreateFinancialAccountTransactionDto {
   @IsNotEmptyObject()
   created_by: User;
 }
+
+export class CreateTransferMoneyTransactionDto {
+  @IsDate()
+  @IsNotEmpty()
+  transaction_date: Date;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  total_amount: number;
+
+  @IsEnum(TransactionType)
+  @IsNotEmpty()
+  transaction_type: TransactionType;
+
+  @IsNotEmptyObject()
+  debit_account: FinancialAccount;
+
+  @IsNotEmptyObject()
+  credit_account: FinancialAccount;
+
+  @IsNotEmptyObject()
+  created_by: User;
+}
